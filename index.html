@@ -2130,7 +2130,7 @@ function renderPanel(){
     const n=N(), prev=nil()>1?menuFor(nil()-1):[], newItems=n.menu.filter(id=>!prev.includes(id)), outer=Math.max(0,n.tables+G.up.ban-G.seizedNow-4);
     const regs=G.regq.map(q=>REGS[q.id].name), goneRegs=Object.keys(REGS).filter(r=>G.regs[r].gone).map(r=>REGS[r].name);
     h=(G.ch?`<div class="title">THỬ THÁCH ${dmOf(G.ch.day)}</div><p class="sub" style="text-align:center;margin-top:-4px">${MICO[G.ch.model]} ${G.shop.name} · ${DIST[G.shop.district].name}</p>
-      <div class="advice">Một đêm duy nhất, ai cũng nhận cùng lượt khách và cùng tình huống. <b>Điểm = tiền lãi cuối đêm.</b> Quán đã có sẵn: ${Object.keys(CH_KIT).map(x=>x==="lo"?MODEL().loName:UPS[x].name).join(", ").toLowerCase()}.</div><div class="card"><h3>Tối nay</h3><div class="rows">`
+      <div class="advice">Một đêm duy nhất, ai cũng nhận cùng lượt khách và cùng tình huống. <b>Điểm = tiền lãi cuối đêm.</b> ${myNick()?`Tên trên bảng: <b>${esc(myNick())}</b>. `:""}Quán đã có sẵn: ${Object.keys(CH_KIT).map(x=>x==="lo"?MODEL().loName:UPS[x].name).join(", ").toLowerCase()}.</div><div class="card"><h3>Tối nay</h3><div class="rows">`
     :`<div class="title">ĐÊM ${nil()}</div><p class="sub" style="text-align:center;margin-top:-4px">${G.shop.name} · ${DIST[G.shop.district].name}${G.leg?` · chặng ${G.leg+1}`:""}</p><div class="card"><h3>Tối nay</h3><div class="rows">`)+`
       ${G.setupPaid&&nil()===1?`<div><span>${G.setupPaid.l}</span><span class="fine">−${vnd(G.setupPaid.v)}</span></div>`:""}
       ${G.branches.length?`<div><span>Cửa hàng khác (người nhà trông)</span><span>${G.branches.map(b=>b.name).join(", ")}</span></div>`:""}
@@ -2193,6 +2193,12 @@ function renderPanel(){
      <div class="btnrow"><button class="btn gold" data-act="chstart">Chơi lại đề này</button><button class="btn" data-act="board">Bảng xếp hạng</button></div>
      ${ledgerSummary(hs)}${shareCardHTML("ch")}
      <button class="btn" data-act="chhome">Về màn hình chính</button>`;
+  } else if(G.screen==="nick"){
+    h=`<div class="title" style="font-size:1.6em">TÊN CHỦ QUÁN</div>
+     <p class="sub">Tên này hiện trên bảng xếp hạng cho mọi người cùng xem. Đổi lại được sau mỗi lượt chơi.</p>
+     <div class="card"><h3>Biệt danh của bạn</h3><div class="nickrow" style="grid-template-columns:1fr"><input id="nickfirst" maxlength="20" autocomplete="nickname" enterkeyhint="go" value="${esc(myNick())}" placeholder="Ví dụ: Minh Trùm Hẻm" aria-label="Biệt danh"></div>
+      <span class="small" id="nickfst" aria-live="polite">Từ 2 đến 20 ký tự: chữ, số, khoảng trắng. Tên tục tĩu sẽ bị từ chối.</span></div>
+     <button class="btn gold" data-act="nickgo">Vào thử thách</button><button class="btn" data-act="nickback">Quay lại</button>`;
   } else if(G.screen==="board"){
     const b=G.board, T=[["day","Hôm nay"],["yday","Hôm qua"],["week","Tuần này"],["model","Mô hình"]];
     h=`<div class="title" style="font-size:1.5em">BẢNG XẾP HẠNG</div>
@@ -2221,14 +2227,14 @@ function renderPanel(){
   $panel.innerHTML=h; fillCard(); if(document.fonts&&document.fonts.ready&&document.getElementById("cardImg"))document.fonts.ready.then(()=>{cardKey="";fillCard();});
 }
 const SAVE_KEY="quan-nhau-dzo-save-v8";
-function saveGame(){try{if(!G||G.ch||G.screen==="title"||G.screen==="play"||G.screen==="board")return;if(G.screen==="ending"){localStorage.removeItem(SAVE_KEY);return;}
+function saveGame(){try{if(!G||G.ch||G.screen==="title"||G.screen==="play"||G.screen==="board"||G.screen==="nick")return;if(G.screen==="ending"){localStorage.removeItem(SAVE_KEY);return;}
   const o=Object.assign({},G,{fx:[],kfx:[],notif:null,toastMsg:null});localStorage.setItem(SAVE_KEY,JSON.stringify(o));}catch(e){}}
 function loadSave(){try{const t=localStorage.getItem(SAVE_KEY);if(!t)return null;const o=JSON.parse(t);return o&&o.shop&&o.night?o:null;}catch(e){return null;}}
 function resumeGame(){const o=loadSave();if(!o)return;const m=G.mute;G=o;G.mute=m;ensureFields();if(G.screen==="play")G.screen="nightstart";useModel();buildStatic();}
 function ensureFields(){const f=fresh();for(const k in f){if(G[k]===undefined)G[k]=f[k];}if(!G.traits)G.traits={k:0,r:0,c:0,t:0};}
 let lastScreen=null;
 function setLayoutClass(){
-  const s=G.screen; $game.classList.toggle("hints",s==="play"&&nil()<=2); $game.classList.toggle("menu",s==="title"||s==="nightstart"); $game.classList.toggle("full",["ledger","broke","reviews","shop","ending","chang","expand","chres","board"].includes(s));
+  const s=G.screen; $game.classList.toggle("hints",s==="play"&&nil()<=2); $game.classList.toggle("menu",s==="title"||s==="nightstart"); $game.classList.toggle("full",["ledger","broke","reviews","shop","ending","chang","expand","chres","board","nick"].includes(s));
 }
 function layout(){
   const vw=window.innerWidth||400, vh=(window.visualViewport&&window.visualViewport.height)||window.innerHeight||800;
@@ -2298,7 +2304,13 @@ document.addEventListener("click",ev=>{
   else if(a==="resume"){resumeGame();}
   else if(a==="again"){const m=G.mute;G=fresh();G.mute=m;buildStatic();G.tables=demoTables();}
   else if(a==="savecard"){saveCard();return;}
-  else if(a==="chstart"){startChallenge();}
+  else if(a==="chstart"){if(!myNick()){G.nickFrom=G.screen;G.screen="nick";renderUI();setTimeout(()=>{const i=$("nickfirst");if(i)i.focus();},50);return;}startChallenge();}
+  else if(a==="nickback"){G.screen=G.nickFrom&&G.nickFrom!=="nick"?G.nickFrom:"title";}
+  else if(a==="nickgo"){const inp=$("nickfirst"),st=$("nickfst"),v=(inp?inp.value:"").trim().replace(/\s+/g," "),er=nickErr(v);
+    if(er){st.textContent=er;st.className="small fine";if(inp)inp.focus();return;}
+    const p=lsGet(PKEY)||{}; p.nick=v; lsSet(PKEY,p);
+    if(p.id&&rankOn())authed("qnd_rename",{p_nick:v}).catch(()=>{});
+    startChallenge();}
   else if(a==="chhome"){CHR=null;RNG=Math.random;const m=G.mute;G=fresh();G.mute=m;buildStatic();G.tables=demoTables();}
   else if(a==="board"){openBoard(G.screen);}
   else if(a==="bdtab"){G.board.kind=b.dataset.k;renderPanel();loadBoard(false);return;}
@@ -2319,6 +2331,9 @@ document.addEventListener("click",ev=>{
   renderUI();
 });
 document.addEventListener("click",ev=>{const m=ev.target.closest("#mute");if(!m)return;G.mute=!G.mute;if(!G.mute&&!VOL)setVol(.8);applyVol();m.innerHTML=G.mute?ICON_MUTE:ICON_SPK;},true);
+document.addEventListener("keydown",ev=>{if(ev.key!=="Enter")return;const id=ev.target&&ev.target.id;
+  if(id==="nickfirst"){ev.preventDefault();const b=document.querySelector('[data-act="nickgo"]');if(b)b.click();}
+  else if(id==="nick"){ev.preventDefault();const b=document.querySelector('[data-act="chnick"]');if(b)b.click();}});
 document.addEventListener("input",ev=>{const r=ev.target.closest&&ev.target.closest("[data-vol]");if(!r)return;audio();setVol(+r.value/100);if(!G.mute&&VOL>0){SFX.pick();}});
 function demoTables(){
   const save=G.night;G.night=3;const arr=[null,null,null,null];G.tables=arr;
