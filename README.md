@@ -14,10 +14,10 @@ Khi chưa cấu hình, thử thách vẫn chơi được nhưng điểm chỉ l�
 
 1. Tạo tài khoản và một project tại https://supabase.com. Chọn region Singapore cho gần Việt Nam.
 2. Vào **SQL Editor → New query**, dán toàn bộ nội dung `supabase/schema.sql` rồi bấm **Run**.
-3. Vào **Project Settings → API**, chép **Project URL** và khoá **anon public**.
+3. Vào **Project Settings → API Keys**, chép khoá **publishable** (`sb_publishable_…`) hoặc khoá legacy **anon public**. Không bao giờ đưa khoá `sb_secret_…`/`service_role` vào game.
 4. Trong `index.html`, tìm dòng `const RANK={url:"",key:""};` và điền vào:
    ```js
-   const RANK={url:"https://xxxx.supabase.co",key:"eyJ...anon key..."};
+   const RANK={url:"https://<project-ref>.supabase.co",key:"sb_publishable_..."};
    ```
    Anon key được phép để công khai: mọi bảng đều bật RLS, và trình duyệt chỉ gọi được các hàm `qnd_*`.
 

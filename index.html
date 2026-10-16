@@ -375,7 +375,7 @@ function seeded(s){return function(){s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>
 /* ===== daily challenge: same night for everyone ===== */
 const GAME_URL="https://minhnguyen1108.github.io/quan-nhau-dzo/";
 /* Supabase: điền URL dự án và anon key (công khai, an toàn khi đã chạy supabase/schema.sql). Để trống = tắt bảng xếp hạng. */
-const RANK={url:"",key:""};
+const RANK={url:"https://sfiwezvridcnoymuzrsi.supabase.co",key:"sb_publishable_irx7FkJozB6H2lUb7TcAnw_TJNj_kVd"};
 const MK=["nhau","trasua","lapxuong","comtam"], DK=["hem","pho","daihoc","vanphong","chodem"];
 const MICO={nhau:"🍻",trasua:"🧋",lapxuong:"🌭",comtam:"🍚"}, MSHORT={nhau:"Nhậu",trasua:"Trà sữa",lapxuong:"Lạp xưởng",comtam:"Cơm tấm"};
 const CH_KIT={giuxe:1,khay:1,bat:1,lo:1}, CH_LEVEL=4;
@@ -1992,7 +1992,7 @@ const rankOn=()=>!!(RANK.url&&RANK.key);
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 async function rpc(fn,args){
   const ctl=typeof AbortController!=="undefined"?new AbortController():null, to=setTimeout(()=>{if(ctl)ctl.abort();},10000);
-  try{const r=await fetch(RANK.url.replace(/\/+$/,"")+"/rest/v1/rpc/"+fn,{method:"POST",headers:{apikey:RANK.key,Authorization:"Bearer "+RANK.key,"Content-Type":"application/json"},body:JSON.stringify(args),signal:ctl?ctl.signal:undefined});
+  try{const r=await fetch(RANK.url.replace(/\/+$/,"")+"/rest/v1/rpc/"+fn,{method:"POST",headers:Object.assign({apikey:RANK.key,"Content-Type":"application/json"},/^eyJ/.test(RANK.key)?{Authorization:"Bearer "+RANK.key}:{}),body:JSON.stringify(args),signal:ctl?ctl.signal:undefined});
     let j=null;try{j=await r.json();}catch(e){}
     if(!r.ok)throw new Error((j&&(j.message||j.hint))||("HTTP "+r.status));
     if(j&&j.error)throw new Error(j.error);
