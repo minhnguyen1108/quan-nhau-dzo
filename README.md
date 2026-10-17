@@ -4,6 +4,14 @@ Game mở quán nhậu vỉa hè: bày bàn, nướng mồi, rót bia, giữ kh�
 
 Toàn bộ game nằm trong `index.html`, không cần cài đặt hay build.
 
+## Cách chơi
+
+- **Đồ có sẵn** (bia, đá, khô gà, trà đá…): chạm là lên khay.
+- **Món nấu**: chạm rổ nguyên liệu (mực, ốc, bò…) rồi chạm bếp. Cùng một nguyên liệu, bếp khác ra món khác: mực + bếp nướng = mực nướng, mực + chảo = mực xào sa tế, mực + nồi lẩu = lẩu hải sản (tốn 2 phần).
+- **Nhập hàng** trước mỗi đêm. Nguyên liệu tươi để qua đêm sẽ hư một phần. Hết hàng giữa đêm thì chạm rổ trống để gọi mối giao gấp (đắt hơn 40%).
+- **Thuê người làm** theo đêm: Dì Ba phụ bếp (tự bày món chín ra khay), Bé Út chạy bàn (tự bưng đồ có sẵn), Chị Lành thu ngân (tự tính tiền, khách dễ bo).
+- Sổ thu chi cuối đêm ghi tiền nhập hàng, lương, món cháy, món hết hàng và hàng còn trong kho.
+
 ## Đêm thử thách mỗi ngày và bảng xếp hạng
 
 Mỗi ngày (theo giờ Việt Nam) có một đề chung: cùng mô hình, cùng khu phố, cùng lượt khách và tình huống cho mọi người. Điểm là tiền lãi của đêm đó. Bảng xếp hạng có 4 tab: Hôm nay, Hôm qua, Tuần này (cộng điểm cao nhất mỗi ngày) và Mô hình (kỷ lục 28 ngày của từng mô hình).
