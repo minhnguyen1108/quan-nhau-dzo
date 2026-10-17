@@ -197,6 +197,16 @@ textarea{width:100%;min-height:80px;border:1.5px solid var(--line);border-radius
 .mrank div{display:grid;grid-template-columns:1.6em 1fr auto;gap:6px;padding:3px 6px;border-radius:6px;color:#3c4043}.mrank div.me{background:#fef7e0;font-weight:700;color:#202124}
 .mtabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e8eaed}.mtabs button{min-height:42px;border:0;background:#fff;color:#5f6368;font-weight:700;border-bottom:3px solid transparent}.mtabs button.on{color:#1a73e8;border-bottom-color:#1a73e8}
 .rv.gone p{text-decoration:line-through;color:#9aa0a6}.badge.warn{color:#c5221f;background:#fce8e6}
+.book{max-width:460px;width:100%;max-height:calc(100vh - 32px);display:flex;flex-direction:column;gap:8px;background:#f6efd9;color:#24304f;border-radius:8px;padding:12px 12px 12px;box-shadow:0 20px 40px rgba(0,0,0,.6)}
+.book .bh{display:flex;justify-content:space-between;align-items:center;font-family:var(--f-hand);font-size:1.35em;color:#b3261e;padding:0 4px}
+.book .bx{border:0;background:transparent;font-size:1.1em;min-width:40px;min-height:40px;color:#7a6a4a}
+.btabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.btabs button{min-height:38px;border-radius:999px;border:1.5px solid #d8cba8;background:#fffaf0;color:#5b4a14;font-weight:700;font-size:.78em;padding:4px 2px}
+.btabs button.on{background:#b3261e;border-color:#b3261e;color:#fff}
+.bbody{overflow:auto;flex:1;min-height:0;padding:0 2px;background-image:repeating-linear-gradient(#f6efd9 0 31px,#d9e2f2 31px 32px)}
+.bnote{margin:4px 2px 6px;font-size:.85em;color:#5b4a14}.bsec{font-family:var(--f-hand);font-size:1.15em;color:#b3261e;margin:8px 2px 2px}
+.brow2{display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;align-items:center;padding:6px 2px;border-bottom:1px dashed #d8cba8}.brow2 img{width:48px;height:48px}
+.brow2 b{display:block;font-size:.98em}.brow2 .fx{display:inline-block;margin:2px 0;background:#fff3c4;border-radius:6px;padding:1px 6px;font-weight:700;font-size:.85em;color:#7a4f00}
+.brow2 small{display:block;font-size:.78em;color:#6a6250}.brow2 small.tip{color:#2b5f3a}.brow2.off{opacity:.45}
 .endgrid div.cur{background:var(--bulb);color:#1b2240;border-color:var(--bulb)}
 </style>
 </head>
@@ -376,6 +386,34 @@ const REGS={
   sv:{name:"Nhóm sinh viên",tag:"Hay viết đánh giá",look:{skin:"#f1c9a6",hair:"#15100d",style:"long",shirt:"#f4f4f4"},size:4,rounds:1,likes:["khoga","oc_wok"]},
   sau:{name:"Chú Sáu xe ôm",tag:"Khách quen",look:{skin:"#c4895c",hair:"#8d8a86",style:"helmet",shirt:"#2f7d4a"},size:2,rounds:1,likes:["bia","oc_wok"]}
 };
+const TIPS={
+  bia:"Bàn nào cũng gọi. Hết đá thì bia kém ngon, khách kém vui.",da:"Rẻ nhưng hay bị gọi kèm bia, nhớ để ý thùng đá.",khoga:"Đồ có sẵn, chạm là lên khay. Món nhắm nhanh nhất quán.",
+  muc_grill:"Món tủ. Lấy ra ngay lúc vàng ruộm thì khách khen và bo thêm.",muc_wok:"Xào lâu hơn nướng 1 giây, chảo bận thì nướng trước.",muc_pot:"Tốn 2 phần mực, nấu 7 giây, nhưng bill cao nhất quán.",
+  oc_grill:"Ốc nướng mỡ hành, khách sinh viên rất mê.",oc_wok:"Anh Hùng với nhóm sinh viên hay gọi món này.",oc_pot:"Tốn 2 phần ốc. Ít người gọi, đừng nấu sẵn.",
+  bo_grill:"Bò cuốn lá lốt nướng, ăn kèm bánh tráng.",bo_wok:"Bò xào lửa lớn, chảo phải trống mới làm được.",bo_pot:"Tốn 2 phần bò. Nồi lẩu bận 7 giây, canh giờ cho khéo.",
+  tra:"Món bán chạy nhất tiệm, có sẵn trong bình.",tranchau:"Topping rẻ, khách hay gọi thêm.",kem:"Khách trẻ rất thích, nhớ lấy đủ số ly.",
+  dao_shaker:"Lắc 3 giây là xong, bình lắc thứ hai giúp ra món gấp đôi.",vai_shaker:"Giống trà đào, chỉ khác nguyên liệu.",sua_blackpot:"Nấu 5 giây, sữa tươi để qua đêm hư một nửa.",khoai_fryer:"Chiên 4 giây, khoai để được lâu, nhập dư không sao.",
+  tratac:"Đồ uống có sẵn, rẻ, ai cũng gọi.",bttron:"Có sẵn, chạm là lên khay.",lx_stone:"Món chính của xe. Nướng đá 3 giây, rất dễ cháy.",lx_griddle:"Nướng than thơm hơn nhưng lâu hơn đá 1 giây.",
+  xx_stone:"Xúc xích nướng đá, nhanh như lạp xưởng.",xx_fryer:"Chiên 4 giây, giòn vỏ.",cv_fryer:"Cá viên chiên, học sinh rất mê.",bt_griddle:"Bánh tráng không hư, nhập dư cũng được.",
+  trada:"Rẻ nhưng bàn nào cũng gọi.",chatrung:"Có sẵn, hay gọi kèm cơm.",canh:"Có sẵn, khách ăn khuya hay gọi.",suon_grill:"Món tủ của quán, sườn nướng than 4 giây.",
+  suon_pan:"Sườn ram trên chảo, chảo nhanh hơn bếp than.",ga_grill:"Gà nướng than, da giòn.",ga_pan:"Gà chiên mắm tỏi, chảo 3 giây.",trung_pan:"Trứng ốp la, rẻ nhưng hay được gọi kèm."};
+function unlockNight(M,tok){return [1,2,3].find(n=>(M.unlock[n]||[]).includes(tok))||1;}
+function recipeOf(id){const it=ITEMS[id];if(!it)return "";if(!it.stocked)return `${it.name}: có sẵn, chạm là lên khay`;
+  const M=MODEL();return `${it.name} = ${M.ings[it.ing].name}${it.use>1?" ×"+it.use:""} + ${M.methods[it.st].name}`;}
+function bookHTML(){
+  const mid=G.bookModel||MODEL().id, M=MODELS[mid], cur=mid===MODEL().id, menu=cur&&G.night?N().menu:null;
+  const dishes=Object.keys(M.dishes), inst=M.instants;
+  const row=(id,locked)=>{const it=M.items[id];const img=iconImg(id);
+    return `<div class="brow2${locked?" off":""}"><img src="${img}" alt=""><div><b>${it.name}</b>${it.stocked?`<span class="fx">${M.ings[it.ing].name}${it.use>1?" ×"+it.use:""} + ${M.methods[it.st].name} · ${it.time} giây</span>`:`<span class="fx">Có sẵn, chạm là lên khay</span>`}
+      <small>Bán ${k(it.price)} · vốn ${k(it.cost)}${locked?` · mở từ đêm ${Math.max(unlockNight(M,it.stocked?it.ing:id),it.stocked?unlockNight(M,it.st):1)}`:""}</small>${TIPS[id]?`<small class="tip">${TIPS[id]}</small>`:""}</div></div>`;};
+  const lockOf=id=>menu?!menu.includes(id):false;
+  return `<div class="modal"><div class="book" role="dialog" aria-label="Sổ công thức"><div class="bh"><b>SỔ CÔNG THỨC</b><button class="bx" data-act="bookx" aria-label="Đóng sổ">✕</button></div>
+    <div class="btabs">${MK.map(m=>`<button class="${m===mid?"on":""}" data-act="bookm" data-k="${m}">${MICO[m]} ${MSHORT[m]}</button>`).join("")}</div>
+    <div class="bbody"><p class="bnote">Món nấu: chạm rổ nguyên liệu, rồi chạm bếp. Món chín chạm bếp lần nữa để lấy lên khay.${G.screen==="play"?" Đang mở sổ thì quán tạm dừng.":""}</p>
+    <div class="bsec">Món nấu</div>${dishes.map(id=>row(id,lockOf(id))).join("")}
+    <div class="bsec">Đồ có sẵn</div>${inst.map(id=>row(id,lockOf(id))).join("")}</div>
+    <button class="btn primary" data-act="bookx">${G.screen==="play"?"Đóng sổ, bán tiếp":"Đóng sổ"}</button></div></div>`;
+}
 const CITIES={sg:"Sài Gòn",hn:"Hà Nội",dn:"Đà Nẵng",hp:"Hải Phòng",ct:"Cần Thơ",hue:"Huế",nt:"Nha Trang",dl:"Đà Lạt",bh:"Biên Hòa",vt:"Vũng Tàu",qn:"Quy Nhơn",bmt:"Buôn Ma Thuột",khac:"Nơi khác"};
 const RIVALS={nhau:["Nhậu Bờ Kè","Quán Gió 79","Ốc Oanh","Lẩu Dê Tám Lùn","Bia Tươi Ba Lúa","Nướng Ngói Chú Hai"],trasua:["Trà Sữa Nhà Gấu","Tiệm Trà Bông","Mây Mây Tea","Trà Chanh Chém Gió","Tocotoco Hẻm"],
   lapxuong:["Ăn Vặt Cô Tư","Bánh Tráng Dì Đinh","Xiên Que Cổng Trường","Cá Viên Út Mập","Lạp Xưởng Tám Đá"],comtam:["Cơm Tấm Bụi","Cơm Tấm Cây Khế","Sườn Muối Ớt","Tấm Đêm Thuận Kiều","Cơm Tấm Ba Ghiền"]};
@@ -496,7 +534,7 @@ const PROG=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]], ARP=[0,1,2,1,0,2,1,2];
 let mStep=0,mNext=0;
 function musicTick(){
   if(!AC||AC.state!=="running"||!MUS) return;
-  const playing=G&&G.screen==="play"&&!G.mute, paused=G&&(G.ev||G.evRes||G.bb), rush=playing&&isRush();
+  const playing=G&&G.screen==="play"&&!G.mute, paused=G&&(G.ev||G.evRes||G.bb||G.book), rush=playing&&isRush();
   MUS.gain.setTargetAtTime(playing?(paused?.25:.6):G&&G.screen!=="play"?.18:0,AC.currentTime,.4);
   AMB.gain.setTargetAtTime(playing?.9:.25,AC.currentTime,.6);
   if(mNext<AC.currentTime) mNext=AC.currentTime+.05;
@@ -713,7 +751,7 @@ function tapShip(j){
   let n=0,val=0; const pBefore=sh.p;
   sh.order.forEach(line=>{while(line.need>0){const idx=G.tray.indexOf(line.item);if(idx<0)break;const perf=trayTake(idx);line.need--;n++;
     const it=ITEMS[line.item],pr=Math.round(it.price*N().price/1000)*1000;sh.bill+=pr;val+=pr;G.ns.costSold+=cashCost(it);sh.p=Math.min(100,sh.p+12+(perf?10:0));if(perf)G.ns.perfect++;}});
-  if(!n){toast(`Shipper ${APPS[sh.app].name} chưa cần món đang có trên khay.`,false);return;}
+  if(!n){const need=sh.order.filter(l=>l.need>0).map(l=>l.item);toast(need.length?`Shipper cần ${need.slice(0,2).map(recipeOf).join(" · ")}`:`Shipper ${APPS[sh.app].name} chưa cần món đang có trên khay.`,false);if(G.toastMsg)G.toastMsg.until=G.rt+3.4;return;}
   comboStep(pBefore,val,cx,cy-20);
   if(sh.order.every(l=>l.need<=0)){
     const fee=Math.round(sh.bill*APPS[sh.app].fee/1000)*1000;
@@ -806,7 +844,7 @@ function tick(dt){
   G.kfx.forEach(f=>f.life-=dt); G.kfx=G.kfx.filter(f=>f.life>0);
   G.tables.forEach(tb=>{if(tb&&tb.cheer>0)tb.cheer-=dt;});
   if(G.flash>0) G.flash-=dt;
-  if(G.screen!=="play"||G.ev||G.evRes||G.bb) return;
+  if(G.screen!=="play"||G.ev||G.evRes||G.bb||G.book) return;
   if(G.anim){G.anim.t+=dt; if(G.anim.t>=G.anim.dur) finishAnim(); return;}
   G.rt+=dt; G.t+=dt*MPS*(G.tut?1.5:1);
   if(nil()>=2&&!G.rushWarn&&G.t>=RUSH0-12){G.rushWarn=true;toast("Sắp tới giờ cao điểm! Khách sẽ kéo tới dồn dập.",true);SFX.rush();}
@@ -891,7 +929,7 @@ function soldOutCheck(order,dt,pos){let ch=false;
   if(ch){G.tables.forEach(tb=>{if(tb&&tb.order===order)tb.p=Math.max(5,tb.p-12);});}
   return ch;}
 function tapStation(id){
-  if(G.screen!=="play"||G.ev||G.evRes||G.bb||G.anim) return;
+  if(G.screen!=="play"||G.ev||G.evRes||G.bb||G.anim||G.book) return;
   const M=MODEL(); if(!N().tok.includes(id)) return; G.press[id]=.15;
   if(M.methods[id]) return tapStove(id); if(M.ings[id]) return tapIng(id);
   const it=ITEMS[id], b=STBOX.find(x=>x.id===id); if(!it||it.kind!=="instant") return;
@@ -941,7 +979,7 @@ function orderDone(i){
   else {tb.phase="bill";tb.p=100;tb.bw=0;if(MODEL().alcohol)tb.drunk++;}
 }
 function tapTable(i){
-  if(G.screen!=="play"||G.ev||G.evRes||G.bb||G.anim) return;
+  if(G.screen!=="play"||G.ev||G.evRes||G.bb||G.anim||G.book) return;
   const tb=G.tables[i]; if(!tb) return; const [cx,cy]=SLOT[i];
   if(tb.phase==="bill"){
     if(G.alert&&G.alert.id==="quyt"&&G.alert.table===i){G.alert=null;toast("Chặn kịp! Khách cười trừ, trả đủ tiền.",true);}
@@ -956,7 +994,8 @@ function tapTable(i){
   tb.order.forEach(line=>{
     while(line.need>0){const idx=G.tray.indexOf(line.item);if(idx<0)break;const perf=trayTake(idx);n++;if(perf)perfN++;val+=serveOne(tb,line,perf);}
   });
-  if(!n){toast(`Bàn ${i+1} chưa cần món đang có trên khay.`,false);return;}
+  if(!n){const need=tb.order.filter(l=>l.need>0).map(l=>l.item).sort((a,b)=>(ITEMS[b].stocked?1:0)-(ITEMS[a].stocked?1:0));
+    toast(need.length?`Bàn ${i+1} cần ${need.slice(0,2).map(recipeOf).join(" · ")}`:`Bàn ${i+1} chưa cần món đang có trên khay.`,false);if(G.toastMsg)G.toastMsg.until=G.rt+3.4;return;}
   fx("+"+k(tb.bill)+" vào hóa đơn",cx,cy-30,"#cfe9ff");
   if(perfN) fx("Món vàng ruộm, khách khen!",cx,cy+40,"#ffd166");
   comboStep(pBefore,val,cx,cy);
@@ -2094,8 +2133,10 @@ function drawFxScene(c){
   G.fx.forEach(f=>{const a=f.life/f.max;c.globalAlpha=Math.min(1,a*1.6);c.textAlign="center";c.font=f.big?"18px Bungee, Impact, sans-serif":"800 12px 'Be Vietnam Pro',sans-serif";
     const y=f.y-(1-a)*26;c.strokeStyle="rgba(8,10,26,.85)";c.lineWidth=3.5;c.strokeText(f.text,f.x,y);c.fillStyle=f.color;c.fillText(f.text,f.x,y);});
   c.globalAlpha=1;
-  if(G.toastMsg&&G.screen==="play"){const m=G.toastMsg;c.font="700 11.5px 'Be Vietnam Pro',sans-serif";const w=Math.min(W-20,c.measureText(m.t).width+24);
-    rr(c,(W-w)/2,LINE_Y-14,w,24,12);c.fillStyle="rgba(10,12,30,.85)";c.fill();c.fillStyle=m.g?"#5fe0a0":"#ffb3a8";c.textAlign="center";c.textBaseline="middle";c.fillText(m.t,W/2,LINE_Y-1.5,W-30);c.textBaseline="alphabetic";}
+  if(G.toastMsg&&G.screen==="play"){const m=G.toastMsg;c.font="700 11.5px 'Be Vietnam Pro',sans-serif";const full=c.measureText(m.t).width;
+    if(full<=W-40){const w=full+24;rr(c,(W-w)/2,LINE_Y-14,w,24,12);c.fillStyle="rgba(10,12,30,.88)";c.fill();c.fillStyle=m.g?"#5fe0a0":"#ffb3a8";c.textAlign="center";c.textBaseline="middle";c.fillText(m.t,W/2,LINE_Y-1.5);c.textBaseline="alphabetic";}
+    else{const words=m.t.split(" ");let l1="";for(const w2 of words){if(c.measureText(l1+" "+w2).width>W-44&&l1)break;l1=l1?l1+" "+w2:w2;}const l2=m.t.slice(l1.length).trim();
+      rr(c,10,LINE_Y-20,W-20,38,12);c.fillStyle="rgba(10,12,30,.9)";c.fill();c.fillStyle=m.g?"#5fe0a0":"#ffb3a8";c.textAlign="center";c.textBaseline="middle";c.fillText(l1,W/2,LINE_Y-8,W-36);c.fillText(l2,W/2,LINE_Y+8,W-36);c.textBaseline="alphabetic";}}
 }
 function drawNotif(c){
   if(!G.notif||G.screen!=="play") return; const a=G.rt-G.notif.t0; if(a>4){G.notif=null;return;}
@@ -2114,7 +2155,7 @@ function drawScene(t,dt){
   if(G.anim&&G.anim.kind==="thugs"){const p=G.anim.t/G.anim.dur;if(p>.35&&p<.7)ctx.translate((Math.random()-.5)*6,(Math.random()-.5)*6);}
   if(BG) ctx.drawImage(BG,0,0,W,SH); else {ctx.fillStyle="#141833";ctx.fillRect(0,0,W,SH);}
   drawSign(ctx,t); drawInterior(ctx,t); drawAwning(ctx);
-  const frozen=!!(G.ev||G.evRes||G.bb);
+  const frozen=!!(G.ev||G.evRes||G.bb||G.book);
   drawTraffic(ctx,frozen?0:dt,frozen);
   drawParked(ctx);
   if(G.screen==="play") drawShips(ctx,t);
@@ -2135,7 +2176,8 @@ function drawScene(t,dt){
 }
 
 /* ================= kitchen ================= */
-const traySlotX=j=>{const n=trayCap(),gap=(TRAY.w-60)/n;return TRAY.x+52+gap*(j+.5);};
+const traySlotX=j=>{const n=trayCap(),gap=(TRAY.w-96)/n;return TRAY.x+52+gap*(j+.5);};
+const BOOKB={x:TRAY.x+TRAY.w-42,y:TRAY.y+6,w:36,h:TRAY.h-12};
 function fitText(c,txt,x,y,maxW,size,weight){let s=size;c.font=`${weight||800} ${s}px 'Be Vietnam Pro',sans-serif`;while(s>6&&c.measureText(txt).width>maxW){s-=.5;c.font=`${weight||800} ${s}px 'Be Vietnam Pro',sans-serif`;}c.fillText(txt,x,y,maxW);}
 function drawKitchen(t){
   if(!kx) return; const c=kx; c.setTransform(kc.width/W,0,0,kc.width/W,0,0);
@@ -2152,6 +2194,9 @@ function drawKitchen(t){
   for(let j=0;j<trayCap();j++){const x=traySlotX(j),y=TRAY.y+TRAY.h/2;const id=G.tray[j];
     if(id){el(c,x,y+12,16,4,"rgba(0,0,0,.18)");drawDish(c,id,x,y,id==="bia"?40:36);if(G.trayP&&G.trayP[j]){c.fillStyle="#ffd166";c.font="900 8px 'Be Vietnam Pro',sans-serif";c.fillText("★",x+14,y-12);}}
     else{c.strokeStyle="rgba(80,90,105,.35)";c.setLineDash([3,3]);c.lineWidth=1.4;c.beginPath();c.arc(x,y,16,0,7);c.stroke();c.setLineDash([]);}}
+  {const b=BOOKB;c.save();c.shadowColor="rgba(0,0,0,.3)";c.shadowBlur=4;c.shadowOffsetY=2;c.fillStyle=lg(c,0,b.y,0,b.y+b.h,[[0,"#9a3b2a"],[1,"#6e2418"]]);rr(c,b.x,b.y,b.w,b.h,5);c.fill();c.restore();
+    c.fillStyle="#f6efd9";c.fillRect(b.x+b.w-6,b.y+3,3,b.h-6);c.strokeStyle="#e8c56b";c.lineWidth=1;rr(c,b.x+3,b.y+3,b.w-11,b.h-6,3);c.stroke();
+    c.fillStyle="#ffe7a8";c.textAlign="center";c.font="900 7.5px 'Be Vietnam Pro',sans-serif";c.fillText("SỔ",b.x+b.w/2-3,b.y+b.h/2-2);c.fillText("MÓN",b.x+b.w/2-3,b.y+b.h/2+7);}
   const need=G.screen==="play"?needMap():{};
   STBOX.forEach(b=>b.k==="st"?drawStove(c,b,t):drawTile(c,b,t,need));
   const tt=tutTarget(); if(tt&&tt.k==="station"){const b=STBOX.find(x=>x.id===tt.id);if(b)drawArrow(c,b.x+b.w/2,b.y+(b.k==="st"?34:30),t);}
@@ -2295,7 +2340,8 @@ function avatar(kind){
 }
 function updModal(){
   let key="",html="";
-  if(G.screen==="play"&&G.ev){const d=EV[G.ev];key="ev:"+G.ev;const text=typeof d.text==="function"?d.text():d.text;
+  if(G.book){key="book:"+(G.bookModel||MODEL().id);html=bookHTML();}
+  else if(G.screen==="play"&&G.ev){const d=EV[G.ev];key="ev:"+G.ev;const text=typeof d.text==="function"?d.text():d.text;
     const nm=typeof d.name==="function"?d.name():d.name, chs=typeof d.choices==="function"?d.choices():d.choices;
     html=`<div class="modal"><div class="card"><div class="who">${avatar(d.who)}<b>${nm}</b></div><div class="bubble">${text}</div>${chs.map((c,i)=>`<button class="btn choice" data-act="ev" data-i="${i}">${c.t}${c.sub?`<small>${c.sub}</small>`:""}</button>`).join("")}</div></div>`;}
   else if(G.screen==="play"&&G.evRes){const d=EV[G.evRes.id];key="res:"+G.evRes.id;
@@ -2327,6 +2373,7 @@ function stockHTML(){
   return `<div class="card"><h3>Nhập hàng tối nay</h3><span class="small">Đã điền sẵn theo lượng khách dự kiến. Nguyên liệu tươi để qua đêm sẽ hư một phần. Hết hàng giữa đêm thì chạm rổ trống để gọi mối giao gấp, giá đắt hơn 40%.</span>${rows}
     <div class="srow tot"><span>Tiền nhập hàng</span><b class="${short?"fine":""}">${vnd(tot)}</b></div>
     <div class="btnrow"><button class="btn" data-act="bsug">Theo gợi ý</button><button class="btn" data-act="bclr">Không nhập thêm</button></div>
+    <button class="btn" data-act="book">📖 Xem sổ công thức</button>
     ${short?`<span class="small fine">Không đủ vốn: hàng và lương cần ${vnd(tot+wageTotal())}, trong túi còn ${vnd(G.money)}. Bớt hàng hoặc bớt người.</span>`:""}</div>`;
 }
 function staffHTML(){
@@ -2638,6 +2685,7 @@ function renderPanel(){
   if(G.screen==="title"){
     h=`<div class="title">QUÁN NHẬU DZÔ</div><p class="sub">Mở quán nhậu vỉa hè 7 đêm. Mỗi ván, các tình huống xảy ra ngẫu nhiên từ đêm 2. Bia phải lạnh, mực không được cháy, xe khách không được tràn ra đường, và khách say không được tự chạy xe về.</p>
       <div class="card"><h3>Cách chơi</h3><ul class="ul"><li>Đồ có sẵn (bia, khô gà…) chạm là lên khay. Món nấu thì chạm rổ nguyên liệu (mực, ốc, bò…) rồi chạm bếp: bếp nướng ra mực nướng, chảo ra mực xào. Chín rồi chạm bếp lần nữa để lấy.</li>
+      <li>Quên cách làm món nào thì chạm vào bàn đang gọi món, hoặc mở <b>sổ món</b> ở góc khay.</li>
       <li>Trước mỗi đêm phải nhập hàng. Hết hàng giữa đêm thì gọi mối giao gấp. Có thể thuê Dì Ba phụ bếp, Bé Út chạy bàn, Chị Lành thu ngân.</li>
       <li>Chạm vào bàn để mang món ra. Bàn hiện <b>Tính tiền</b> thì chạm để thu.</li><li>Món cháy, nấu thừa là mất nguyên liệu, nên chỉ làm khi có bàn gọi.</li>
       <li>Mỗi bàn rời quán có thể để lại đánh giá trên bản đồ. Điểm đánh giá quyết định quán đông hay vắng.</li>
@@ -2646,6 +2694,7 @@ function renderPanel(){
         <small>Ai cũng chơi cùng một đêm: cùng lượt khách, cùng tình huống. Điểm là tiền lãi đêm đó, xếp hạng với mọi người. Mỗi ngày một đề mới.</small>${lb?`<small>Điểm cao nhất của bạn hôm nay: <b style="color:var(--ink)">${ks(lb.score)}</b> · ${lb.n} lượt</small>`:""}
         <div class="btnrow"><button class="btn gold" data-act="chstart">Chơi thử thách</button><button class="btn" data-act="board">Bảng xếp hạng</button></div></div>`;})()}
       ${(()=>{const P=myProf();return P.nick||P.shop?`<div class="card pcard"><b>${esc(P.shop||P.nick)}</b><small>${P.shop?`Chủ quán ${esc(P.nick||"…")}`:"Chưa đặt tên quán"}${placeOf(P.area,P.city)?` · ${esc(placeOf(P.area,P.city))}`:""}</small><button class="btn" data-act="profedit">Sửa hồ sơ</button></div>`:`<button class="btn" data-act="profedit">Đặt tên quán và khu vực</button>`;})()}
+      <button class="btn" data-act="book">📖 Sổ công thức các món</button>
       ${(()=>{const sv=loadSave();return sv?`<button class="btn primary" data-act="resume">Chơi tiếp · Đêm ${Math.max(1,sv.night-(sv.legStart||0))} · ${sv.shop.name}</button><button class="btn" data-act="start">Mở quán mới</button>`:`<button class="btn primary" data-act="start">Mở quán</button>`;})()}
       ${volHTML()}`;
   } else if(G.screen==="nightstart"){
@@ -2757,7 +2806,7 @@ function renderPanel(){
 }
 const SAVE_KEY="quan-nhau-dzo-save-v8";
 function saveGame(){try{if(!G||G.ch||G.screen==="title"||G.screen==="play"||G.screen==="board"||G.screen==="nick")return;if(G.screen==="ending"){localStorage.removeItem(SAVE_KEY);return;}
-  const o=Object.assign({},G,{fx:[],kfx:[],notif:null,toastMsg:null});localStorage.setItem(SAVE_KEY,JSON.stringify(o));}catch(e){}}
+  const o=Object.assign({},G,{fx:[],kfx:[],notif:null,toastMsg:null,book:0});localStorage.setItem(SAVE_KEY,JSON.stringify(o));}catch(e){}}
 function loadSave(){try{const t=localStorage.getItem(SAVE_KEY);if(!t)return null;const o=JSON.parse(t);return o&&o.shop&&o.night?o:null;}catch(e){return null;}}
 function resumeGame(){const o=loadSave();if(!o)return;const m=G.mute;G=o;G.mute=m;ensureFields();if(G.screen==="play")G.screen="nightstart";useModel();applyCosts();if(G.night)G.np=calcNP();if(G.ns)G.ns=Object.assign({buy:[],wages:[],soldOut:0,soldOutV:0,lost:0,trail:[],spoiled:{}},G.ns);if(G.screen==="nightstart"&&!Object.keys(G.buy||{}).length)G.buy=suggestBuy();if(!G.st||Object.keys(G.st).some(k=>!MODEL().methods[k]))G.st=freshSt();buildStatic();}
 function ensureFields(){const f=fresh();for(const k in f){if(G[k]===undefined)G[k]=f[k];}if(!G.traits)G.traits={k:0,r:0,c:0,t:0};for(const g in G.stock||{})if(!MODEL().ings[g])delete G.stock[g];}
@@ -2802,7 +2851,8 @@ cv.addEventListener("pointerdown",ev=>{
 kc.addEventListener("pointerdown",ev=>{
   audio(); if(G.screen!=="play") return; ev.preventDefault();
   const [x,y]=toDesign(ev,kc);
-  if(y<TRAY.y+TRAY.h+4){for(let j=0;j<G.tray.length;j++){if(Math.abs(x-traySlotX(j))<24){tapTray(j);break;}}renderUI();return;}
+  if(x>=BOOKB.x-4&&y<TRAY.y+TRAY.h+4){if(!G.ev&&!G.evRes&&!G.bb){G.book=1;G.bookModel=null;renderUI();}return;}
+  if(y<TRAY.y+TRAY.h+4){for(let j=0;j<G.tray.length;j++){if(Math.abs(x-traySlotX(j))<20){tapTray(j);break;}}renderUI();return;}
   const b=STBOX.find(b=>x>=b.x&&x<=b.x+b.w&&y>=b.y&&y<=b.y+b.h); if(b){tapStation(b.id);renderUI();}
 });
 document.addEventListener("click",ev=>{
@@ -2811,6 +2861,9 @@ document.addEventListener("click",ev=>{
   if(a==="start"){const P=myProf();if(!P.asked&&!P.shop){P.asked=1;lsSet(PKEY,P);G.profNext="start";G.nickFrom=G.screen;G.screen="nick";renderUI();return;}
     const m=G.mute;G=fresh();G.mute=m;if(P.shop){G.shop.name=P.shop;G.shop.custom=true;}buildStatic();startNight();}
   else if(a==="profedit"){G.profNext=null;G.nickFrom=G.screen;G.screen="nick";}
+  else if(a==="book"){G.book=1;G.bookModel=null;renderUI();return;}
+  else if(a==="bookx"){G.book=0;renderUI();return;}
+  else if(a==="bookm"){G.bookModel=b.dataset.k;modalKey="";renderUI();return;}
   else if(a==="revtab"){G.revTab=b.dataset.k;renderPanel();return;}
   else if(a==="bdcity"){G.board.city=b.dataset.k||null;renderPanel();loadBoard(false);return;}
   else if(a==="outer"){G.useOuter=b.checked;setupTables();renderPanel();}
