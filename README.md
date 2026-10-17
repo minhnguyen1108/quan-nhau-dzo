@@ -11,6 +11,9 @@ Toàn bộ game nằm trong `index.html`, không cần cài đặt hay build.
 - **Nhập hàng** trước mỗi đêm. Nguyên liệu tươi để qua đêm sẽ hư một phần. Hết hàng giữa đêm thì chạm rổ trống để gọi mối giao gấp (đắt hơn 40%).
 - **Thuê người làm** theo đêm: Dì Ba phụ bếp (tự bày món chín ra khay), Bé Út chạy bàn (tự bưng đồ có sẵn), Chị Lành thu ngân (tự tính tiền, khách dễ bo).
 - Sổ thu chi cuối đêm ghi tiền nhập hàng, lương, món cháy, món hết hàng và hàng còn trong kho.
+- **Hồ sơ quán**: đặt tên quán, thành phố, quận/phường. Tên quán hiện trên biển hiệu, trên Quán Map và bảng xếp hạng (lọc được theo thành phố).
+- **Quán Map**: trang đánh giá của quán, có biểu đồ sao, hạng so với các quán cùng khu, trả lời đánh giá, và đối thủ thỉnh thoảng đăng đánh giá giả để phá.
+- **Cốt truyện** ngắn cho 7 đêm đầu.
 
 ## Đêm thử thách mỗi ngày và bảng xếp hạng
 
@@ -28,6 +31,10 @@ Khi chưa cấu hình, thử thách vẫn chơi được nhưng điểm chỉ l�
    const RANK={url:"https://<project-ref>.supabase.co",key:"sb_publishable_..."};
    ```
    Anon key được phép để công khai: mọi bảng đều bật RLS, và trình duyệt chỉ gọi được các hàm `qnd_*`.
+
+### Nâng cấp từ bản trước
+
+Đã chạy `schema.sql` bản cũ thì chỉ cần chạy lại toàn bộ file `supabase/schema.sql` mới một lần. Điểm và người chơi cũ được giữ nguyên, bảng có thêm cột tên quán, thành phố, khu vực. Chưa chạy thì game vẫn chạy, chỉ là bảng xếp hạng chưa hiện tên quán và chưa lọc theo thành phố.
 
 ### Chống gian lận
 

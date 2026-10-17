@@ -159,11 +159,12 @@ textarea{width:100%;min-height:80px;border:1.5px solid var(--line);border-radius
 .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .tab{min-height:40px;padding:6px 4px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-weight:700;font-size:.8em;cursor:pointer}
 .tab.on{background:var(--bulb);border-color:var(--bulb);color:#1b2240}
-.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.chips.two{grid-template-columns:1fr 1fr}
 .brow{display:grid;grid-template-columns:2.2em minmax(0,1fr) auto;gap:8px;align-items:center;padding:7px 6px;border-bottom:1px dotted var(--line)}
 .brow:last-child{border-bottom:0}.brow.me{background:rgba(255,209,102,.13);border-radius:8px}
 .brow .rk{font-weight:800;text-align:center;color:var(--muted)}.brow .rk.t1{color:#ffd166}.brow .rk.t2{color:#d9dee8}.brow .rk.t3{color:#e0a36b}
 .brow .nk{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.brow small{display:block;color:var(--muted);font-size:.76em;font-weight:500}
+.brow small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .brow .sc{font-weight:800;font-variant-numeric:tabular-nums}
 .bgap{text-align:center;color:var(--muted);font-size:.8em;padding:2px 0}
 .nickrow{display:grid;grid-template-columns:1fr auto;gap:8px}
@@ -186,6 +187,16 @@ textarea{width:100%;min-height:80px;border:1.5px solid var(--line);border-radius
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:8px}.stats div{background:#0f1430;border:1px solid var(--line);border-radius:10px;padding:6px 4px;text-align:center}
 .stats b{display:block;font-size:1.25em;font-variant-numeric:tabular-nums}.stats small{font-size:.7em;color:var(--muted);line-height:1.2;display:block}
 .story{background:#241d33;border:1px solid #5a4a7a;border-radius:12px;padding:10px 12px;font-size:.9em;color:#e9e1ff}.story b{color:#ffd166}
+.prof label{display:flex;flex-direction:column;gap:4px;font-size:.85em;color:var(--muted);min-width:0}.prof label span small{font-size:.9em}
+.prof input,.prof select{min-height:46px;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;font-size:1.05em;background:var(--night);color:var(--ink);width:100%}
+.prow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pcard{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center}.pcard b{font-size:1.05em}.pcard small{color:var(--muted);font-size:.82em}.pcard .btn{min-height:40px;grid-row:1/3;grid-column:2;font-size:.85em}
+.hist{padding:10px 16px;border-bottom:1px solid #e8eaed;display:flex;flex-direction:column;gap:3px}.hist div{display:grid;grid-template-columns:2em 1fr 2.4em;gap:8px;align-items:center;font-size:.78em;color:#5f6368}
+.hist i{display:block;height:8px;border-radius:4px;background:#e8eaed;overflow:hidden}.hist b{display:block;height:100%;background:#f4b400;border-radius:4px}
+.mrank{padding:10px 16px;border-bottom:1px solid #e8eaed;font-size:.82em;color:#5f6368;display:flex;flex-direction:column;gap:3px}.mrank b{color:#202124;font-size:1.05em}
+.mrank div{display:grid;grid-template-columns:1.6em 1fr auto;gap:6px;padding:3px 6px;border-radius:6px;color:#3c4043}.mrank div.me{background:#fef7e0;font-weight:700;color:#202124}
+.mtabs{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e8eaed}.mtabs button{min-height:42px;border:0;background:#fff;color:#5f6368;font-weight:700;border-bottom:3px solid transparent}.mtabs button.on{color:#1a73e8;border-bottom-color:#1a73e8}
+.rv.gone p{text-decoration:line-through;color:#9aa0a6}.badge.warn{color:#c5221f;background:#fce8e6}
 .endgrid div.cur{background:var(--bulb);color:#1b2240;border-color:var(--bulb)}
 </style>
 </head>
@@ -355,9 +366,9 @@ const UPS={
   hood:{name:"Máy hút khói",desc:"Khói nướng không bay sang nhà hàng xóm.",price:400000}
 };
 const STAFF={
-  ba:{name:"Dì Ba",role:"Phụ bếp",wage:180000,look:{skin:"#d9a07a",hair:"#3b2f2a",style:"long",shirt:"#7a5bb5"},desc:"Món chín là Dì Ba bày ra khay giùm, không để cháy (khay phải còn chỗ).",quirk:"Dì bày đúng lúc chứ không canh vàng ruộm."},
-  ut:{name:"Bé Út",role:"Chạy bàn",wage:160000,look:{skin:"#f0c49c",hair:"#1d1714",style:"spiky",shirt:"#e2574c"},desc:"Tự bưng đồ có sẵn ra bàn đang gọi, cứ vài giây một lượt.",quirk:"Khách hay kéo ngồi cụng ly, có lúc biến mất một lúc."},
-  lanh:{name:"Chị Lành",role:"Thu ngân",wage:140000,look:{skin:"#f1c9a6",hair:"#2b2420",style:"long",shirt:"#2fa3a3"},desc:"Tự ra tính tiền bàn gọi thanh toán sau 2 giây, khách khó ăn quỵt.",quirk:"Ăn nói có duyên, bàn nào chị tính tiền cũng dễ bo hơn."}
+  ba:{from:2,name:"Dì Ba",role:"Phụ bếp",wage:180000,look:{skin:"#d9a07a",hair:"#3b2f2a",style:"long",shirt:"#7a5bb5"},desc:"Món chín là Dì Ba bày ra khay giùm, không để cháy (khay phải còn chỗ).",quirk:"Dì bày đúng lúc chứ không canh vàng ruộm."},
+  ut:{from:3,name:"Bé Út",role:"Chạy bàn",wage:160000,look:{skin:"#f0c49c",hair:"#1d1714",style:"spiky",shirt:"#e2574c"},desc:"Tự bưng đồ có sẵn ra bàn đang gọi, cứ vài giây một lượt.",quirk:"Khách hay kéo ngồi cụng ly, có lúc biến mất một lúc."},
+  lanh:{from:4,name:"Chị Lành",role:"Thu ngân",wage:140000,look:{skin:"#f1c9a6",hair:"#2b2420",style:"long",shirt:"#2fa3a3"},desc:"Tự ra tính tiền bàn gọi thanh toán sau 2 giây, khách khó ăn quỵt.",quirk:"Ăn nói có duyên, bàn nào chị tính tiền cũng dễ bo hơn."}
 };
 const REGS={
   bay:{name:"Anh Bảy",tag:"Khách quen",look:{skin:"#cf9468",hair:"#2a2420",style:"bald",shirt:"#f1efe8",chain:true},size:3,rounds:2,likes:["khoga","bia"]},
@@ -365,6 +376,21 @@ const REGS={
   sv:{name:"Nhóm sinh viên",tag:"Hay viết đánh giá",look:{skin:"#f1c9a6",hair:"#15100d",style:"long",shirt:"#f4f4f4"},size:4,rounds:1,likes:["khoga","oc_wok"]},
   sau:{name:"Chú Sáu xe ôm",tag:"Khách quen",look:{skin:"#c4895c",hair:"#8d8a86",style:"helmet",shirt:"#2f7d4a"},size:2,rounds:1,likes:["bia","oc_wok"]}
 };
+const CITIES={sg:"Sài Gòn",hn:"Hà Nội",dn:"Đà Nẵng",hp:"Hải Phòng",ct:"Cần Thơ",hue:"Huế",nt:"Nha Trang",dl:"Đà Lạt",bh:"Biên Hòa",vt:"Vũng Tàu",qn:"Quy Nhơn",bmt:"Buôn Ma Thuột",khac:"Nơi khác"};
+const RIVALS={nhau:["Nhậu Bờ Kè","Quán Gió 79","Ốc Oanh","Lẩu Dê Tám Lùn","Bia Tươi Ba Lúa","Nướng Ngói Chú Hai"],trasua:["Trà Sữa Nhà Gấu","Tiệm Trà Bông","Mây Mây Tea","Trà Chanh Chém Gió","Tocotoco Hẻm"],
+  lapxuong:["Ăn Vặt Cô Tư","Bánh Tráng Dì Đinh","Xiên Que Cổng Trường","Cá Viên Út Mập","Lạp Xưởng Tám Đá"],comtam:["Cơm Tấm Bụi","Cơm Tấm Cây Khế","Sườn Muối Ớt","Tấm Đêm Thuận Kiều","Cơm Tấm Ba Ghiền"]};
+/* story: one short chapter per night of the first week, then one opener for each new shop */
+const STORY={nhau:[
+  ["Chìa khoá hẻm 42","Ba về quê nghỉ, để lại chìa khoá cửa cuốn, mấy bộ bàn nhựa đỏ và một câu: “Quán này nuôi cả nhà hai chục năm. Con làm được thì làm, không thì sang cho người ta.” Bạn xin công ty nghỉ phép một tuần, kéo cửa cuốn lên. Anh Bảy hàng xóm đã ngồi sẵn ở bàn số 1."],
+  ["Dì Ba gõ cửa","Sáng nay Dì Ba đầu hẻm ghé qua. Hồi xưa dì phụ bếp cho Ba gần chục năm. “Con cần người bày món thì kêu dì, dì lấy rẻ.” Từ tối nay bạn thuê được Dì Ba ở phần thuê người làm."],
+  ["Thằng Út con chị Tư","Chị Tư bán nước kế bên dắt thằng Út tới: “Nó nghỉ hè, cho nó chạy bàn kiếm tiền tiêu vặt nha em.” Út chạy nhanh như sóc, mỗi tội khách mời cụng ly là ngồi luôn."],
+  ["Cuốn sổ nợ của Ba","Dọn quầy, bạn tìm thấy cuốn sổ nợ cũ của Ba, kín tên khách quen. Chị Lành, người giữ sổ cho Ba ngày trước, nhận lời quay lại thu ngân: “Có chị đứng quầy, không ai quỵt được đồng nào.”"],
+  ["Lên Quán Map","Có người đăng ảnh quán lên Quán Map. Từ giờ mỗi đánh giá đều có người đọc. Quán bên kia đường cũng bắt đầu để ý bạn."],
+  ["Ba gọi điện","Ba gọi từ quê lên: “Nghe nói quán đông lại rồi hả con?” Giọng Ba cười, nhưng vẫn dặn: “Nhớ đừng để khách say tự chạy xe về.”"],
+  ["Đêm quyết định","Công ty nhắn hỏi khi nào bạn đi làm lại. Hết đêm nay phải quyết: treo bảng sang quán, hay ở lại làm chủ quán thật sự."]],
+  trasua:[["Tiệm nhỏ trên phố","Tiệm trà sữa mười mét vuông, tường hồng, một cái máy dán ly. Khách trẻ tới đông và đi nhanh, chậm một nhịp là mất khách."]],
+  lapxuong:[["Xe đẩy cổng trường","Chiếc xe đẩy cũ sơn lại màu cam, phiến đá nướng mới mua. Tan học là cả đám học sinh ùa ra, ai cũng đòi lạp xưởng nướng đá."]],
+  comtam:[["Bếp than khuya","Quán cơm tấm mở từ 6 giờ tối tới khuya. Khách là tài xế, công nhân tan ca, sinh viên ôn thi. Mùi sườn nướng than bay khắp con đường."]]};
 const NAMES=["Minh Tuấn","Thảo Vy","Quốc Bảo","Ngọc Hân","Hoàng Long","Thanh Hà","Đức Anh","Mỹ Linh","Gia Huy","Bảo Trâm","Tiến Đạt","Phương Nhi","Khánh Duy","Lan Anh"];
 const AVC=["#1a73e8","#d93025","#188038","#e37400","#9334e6","#007b83","#c5221f","#5f6368"];
 const SKINS=["#f1c49c","#e2ad84","#d39a6e","#c4895c","#f4d2b4"], HAIRC=["#1d1714","#2b2420","#3b2418","#5a3a26","#7a3b1c"];
@@ -556,7 +582,7 @@ function startNight(){
   if(G.ch){CHR={day:G.ch.day,haz:{},g:0,s:0};RNG=chStream("night");}
   G.night++; useModel(); G.np=calcNP(); const n=N();
   if(!G.stock)G.stock={}; G.spoiled={}; {const MI=MODEL().ings;for(const g in G.stock){if(!MI[g]){delete G.stock[g];continue;}if(G.stock[g]>0){const lost=Math.round(G.stock[g]*MI[g].spoil);if(lost>0){G.spoiled[g]=lost;G.stock[g]-=lost;}}}}
-  G.restock={}; G.hand=null; G.soWarn=false; if(!G.staffHire)G.staffHire={ba:0,ut:0,lanh:0}; G.staffOn={};
+  G.restock={}; G.hand=null; G.soWarn=false; G.revTab="new"; mapResolve(); if(!G.staffHire)G.staffHire={ba:0,ut:0,lanh:0}; G.staffOn={};
   Object.assign(G,{closedMsg:false,quytArmed:false,t:0,rt:0,tray:[],st:freshSt(),ev:null,evRes:null,evTable:-1,bb:null,alert:null,anim:null,fx:[],kfx:[],notif:null,
     daOff:-1,rainUntil:-1,tarp:false,darkUntil:-1,outerClosed:-1,parkFix:-1,ovT:0,lastPark:-99,flash:0});
   G.ns={sales:0,tips:0,costSold:0,burnt:[0,0],trash:[0,0],left:[0,0],extra:G.pendingExtra.slice(),fines:[],otherIn:[],served:0,gone:0,reviews:[],debtNew:0,seized:0,quyt:0,fled:0,fakeCK:0,freeKol:0,dibao:0,comboTip:0,maxCombo:0,perfect:0,ships:0,shipSales:0,shipCancel:0,trail:[],buy:[],wages:[],soldOut:0,soldOutV:0,lost:0,spoiled:Object.assign({},G.spoiled)};
@@ -603,7 +629,7 @@ function buyTotal(){const M=MODEL();let v=0;for(const g in G.buy)v+=(G.buy[g]||0
 function commitNight(){
   const M=MODEL();
   for(const g in G.buy){const q=G.buy[g]|0;if(q>0&&M.ings[g]){G.stock[g]=(G.stock[g]||0)+q;G.ns.buy.push({ing:g,n:q,v:q*M.ings[g].cost});}}
-  G.staffOn={}; for(const s in STAFF){if(G.staffHire[s]){G.staffOn[s]=1;G.ns.wages.push({id:s,l:`${STAFF[s].name} (${STAFF[s].role.toLowerCase()})`,v:STAFF[s].wage});}}
+  G.staffOn={}; for(const s in STAFF){if(G.staffHire[s]&&staffOpen(s)){G.staffOn[s]=1;G.ns.wages.push({id:s,l:`${STAFF[s].name} (${STAFF[s].role.toLowerCase()})`,v:STAFF[s].wage});}}
 }
 function setupTables(){
   let n=N().tables+G.up.ban-G.seizedNow; if(!G.useOuter||(G.flood&&!G.floodPrep)) n=Math.min(n,4);
@@ -718,7 +744,7 @@ function drainRate(tb){return (tb.phase==="bill"?3.2:1.8)*(tb.ship?1.3:1)*(tb.vi
 function starsFor(tb){let s=tb.minP>=70?5:tb.minP>=45?4:tb.minP>=25?3:2;if(tb.perfect&&s>=3)s++;if(tb.wet)s--;if(tb.dark&&s>3)s--;return cl(s,1,5);}
 
 /* reviews */
-function pushReview(r,extraN,extraStars){r.color=r.color||pick(AVC);r.night=G.night;r.reply=null;G.ns.reviews.push(r);G.allReviews.push(r);G.rSum+=r.stars+(extraN||0)*(extraStars||r.stars);G.rN+=1+(extraN||0);G.notif={r,t0:G.rt};SFX.notif();}
+function pushReview(r,extraN,extraStars){r.color=r.color||pick(AVC);r.night=G.night;r.leg=G.leg;r.w=1+(extraN||0);r.reply=null;G.ns.reviews.push(r);G.allReviews.push(r);G.rSum+=r.stars+(extraN||0)*(extraStars||r.stars);G.rN+=1+(extraN||0);G.notif={r,t0:G.rt};SFX.notif();}
 function kolReview(tb,left){
   let st=left?1:starsFor(tb); if(tb.strict&&tb.minP<80) st=Math.min(st,3);
   if(!left&&(st>=5||(tb.free&&st>=4))){G.viralNext=.35;pushReview({name:"Reviewer Ăn Khắp Phố",stars:5,why:"kol_good",text:MODEL().kolGood},4,5);toast("Video review lên xu hướng! Đêm sau khách đông hơn.",true);moment("Reviewer quay clip khen quán, video lên xu hướng",8);}
@@ -743,7 +769,7 @@ function review(tb,stars,reason){
   else if(tb.wet){text=pick(REV.wet);why="wet";}
   else if(tb.dark){text=pick(REV.dark);why="dark";}
   else {text=pick(REV.slow);why="slow";}
-  const r={name:reg?REGS[reg].name:pick(NAMES),reg,stars,text,why,dish,color:pick(AVC),night:G.night,reply:null};
+  const r={name:reg?REGS[reg].name:pick(NAMES),reg,stars,text,why,dish,color:pick(AVC),night:G.night,leg:G.leg,reply:null};
   G.ns.reviews.push(r); G.allReviews.push(r); G.rSum+=stars; G.rN++;
   G.notif={r,t0:G.rt}; SFX.notif();
   if(reg){const m=G.regs[reg];m.v++;m.last=stars;m.plus=stars>=4;if(stars<=2){m.gone=true;G.replyBonus-=.04;}}
@@ -1139,6 +1165,7 @@ function endNight(){
   if(G.alert){G.alert=null;}
   (G.ships||[]).forEach(sh=>{if(sh.state!=="out"){G.ns.shipCancel++;}}); G.ships=[];
   G.tables.forEach((tb,i)=>{ if(tb){ if(tb.phase==="bill") settle(i,"pay"); else { G.ns.sales+=tb.bill; G.ns.served++; G.tables[i]=null; } } });
+  mapFake();
   const leftF=id=>{const it=ITEMS[id];G.ns.left[0]++;G.ns.left[1]+=cashCost(it);if(it.stocked)G.ns.lost+=it.cost;};
   G.tray.forEach(leftF); G.tray=[]; G.trayP=[]; G.hand=null;
   for(const key in G.st) G.st[key].forEach(s=>leftF(s.item)); G.st=freshSt();
@@ -1207,8 +1234,8 @@ function drawCard(mode){
   for(let i=0;i<19;i++){const x=30+i*57,y=40+70*Math.sin(Math.PI*x/1080)*.95;const col=["#ffd166","#ff6b6b","#7ae0ff","#9cff8f"][i%4];c.fillStyle=col;c.shadowColor=col;c.shadowBlur=24;c.beginPath();c.arc(x,y+14,9,0,7);c.fill();}c.shadowBlur=0;
   /* sign */
   c.fillStyle="#1a0d0b";rr(c,70,140,940,170,18);c.fill();c.fillStyle=lg(c,0,150,0,300,[[0,TT.board[0]],[1,TT.board[1]]]);rr(c,84,152,912,146,12);c.fill();
-  c.textAlign="center";c.textBaseline="middle";c.font=F("",84,"b");let tw=c.measureText(M.sign).width;if(tw>840)c.font=F("",Math.floor(84*840/tw),"b");
-  c.fillStyle=TT.signCol;c.shadowColor=TT.signCol;c.shadowBlur=26;c.fillText(M.sign,540,215);c.shadowBlur=0;
+  const ST=signText();c.textAlign="center";c.textBaseline="middle";c.font=F("",84,"b");let tw=c.measureText(ST).width;if(tw>840)c.font=F("",Math.floor(84*840/tw),"b");
+  c.fillStyle=TT.signCol;c.shadowColor=TT.signCol;c.shadowBlur=26;c.fillText(ST,540,215);c.shadowBlur=0;
   c.font=F(700,30);c.fillStyle="#fff1cf";c.fillText(CHM?`${DIST[G.shop.district].name} · cùng một đêm cho mọi người`:`${DIST[G.shop.district].name} · ${legH.length} đêm${G.branches.length?` · chuỗi ${G.branches.length+1} quán`:""}`,540,272);
   /* result */
   c.font=F("",64,"b");tw=c.measureText(ft.t).width;if(tw>960)c.font=F("",Math.floor(64*960/tw),"b");c.fillStyle="#ffd166";c.shadowColor="rgba(255,209,102,.6)";c.shadowBlur=20;c.fillText(ft.t,540,372);c.shadowBlur=0;
@@ -1925,9 +1952,9 @@ function drawSign(c,t){
     const on=!dark&&((idx+Math.floor(t*10))%4!==0);el(c,x,y,1.4,1.4,on?(idx%2?"#ffe08a":"#7ae0ff"):"#4a2a28");}
   c.save();c.textAlign="center";c.textBaseline="middle";c.font="20px Bungee, Impact, sans-serif";
   if(!dark){c.shadowColor="rgba(255,209,102,.95)";c.shadowBlur=10+Math.sin(t*7)*2;}
-  const M=MODEL(),sc=M.theme.signCol; if(!dark)c.shadowColor=sc;
-  const tw=c.measureText(M.sign).width; if(tw>270){c.font=`${Math.floor(20*270/tw)}px Bungee, Impact, sans-serif`;}
-  c.fillStyle=dark?"#6b4a2a":sc;c.fillText(M.sign,180,80);
+  const M=MODEL(),sc=M.theme.signCol,ST=signText(); if(!dark)c.shadowColor=sc;
+  const tw=c.measureText(ST).width; if(tw>270){c.font=`${Math.floor(20*270/tw)}px Bungee, Impact, sans-serif`;}
+  c.fillStyle=dark?"#6b4a2a":sc;c.fillText(ST,180,80);
   c.shadowBlur=0;c.font="800 8px 'Be Vietnam Pro',sans-serif";c.fillStyle=dark?"#6b4a2a":"#fff1cf";c.fillText(M.sub,180,93);
   c.restore();
 }
@@ -1975,7 +2002,7 @@ function drawNotif(c){
   const slide=a<.3?a/.3:a>3.6?(4-a)/.4:1, y=-50+slide*58, r=G.notif.r;
   c.save();c.shadowColor="rgba(0,0,0,.4)";c.shadowBlur=10;rr(c,14,y,W-28,48,12);c.fillStyle="rgba(250,250,252,.97)";c.fill();c.restore();
   c.fillStyle="#d93025";c.beginPath();c.arc(32,y+17,7,Math.PI,0);c.lineTo(32,y+30);c.closePath();c.fill();el(c,32,y+16,2.6,2.6,"#fff");
-  c.textAlign="left";c.fillStyle="#5f6368";c.font="700 9px 'Be Vietnam Pro',sans-serif";c.fillText("BẢN ĐỒ · Đánh giá mới cho "+G.shop.name,46,y+14);
+  c.textAlign="left";c.fillStyle="#5f6368";c.font="700 9px 'Be Vietnam Pro',sans-serif";c.fillText("QUÁN MAP · Đánh giá mới cho "+G.shop.name,46,y+14,W-80);
   c.fillStyle="#f4b400";c.font="12px 'Be Vietnam Pro',sans-serif";c.fillText(starStr(r.stars),46,y+29);
   c.fillStyle="#202124";c.font="700 10.5px 'Be Vietnam Pro',sans-serif";c.fillText(r.name,118,y+29,W-150);
   c.fillStyle="#3c4043";c.font="500 10px 'Be Vietnam Pro',sans-serif";c.fillText("“"+r.text+"”",46,y+42,W-74);
@@ -2180,8 +2207,15 @@ function updModal(){
   if(key!==modalKey){modalKey=key;$modal.innerHTML=html;}
 }
 const ingList=(arr,M)=>{const o={};arr.forEach(x=>o[x.ing]=(o[x.ing]||0)+x.n);return Object.entries(o).map(([g,n])=>`${(M.ings[g]?M.ings[g].name:g).toLowerCase()} ${n}`).join(", ");};
-function wageTotal(){return Object.keys(STAFF).reduce((a,s)=>a+(G.staffHire&&G.staffHire[s]?STAFF[s].wage:0),0);}
+function wageTotal(){return Object.keys(STAFF).reduce((a,s)=>a+(G.staffHire&&G.staffHire[s]&&staffOpen(s)?STAFF[s].wage:0),0);}
 function cantAfford(){return !G.ch&&G.money<buyTotal()+wageTotal();}
+function storyHTML(){
+  if(G.ch) return ""; const M=MODEL(), arr=STORY[M.id]||[], n=nil();
+  let ch=null; if(G.leg===0&&M.id==="nhau") ch=arr[n-1]; else if(n===1) ch=arr[0];
+  if(!ch) return "";
+  return `<div class="story"><b>${G.leg===0&&M.id==="nhau"?`Chương ${n}: `:""}${ch[0]}</b><br>${ch[1]}</div>`;
+}
+const staffOpen=id=>G.ch||G.leg>0||nil()>=(STAFF[id].from||1);
 function stockHTML(){
   const M=MODEL(),n=N(),tot=buyTotal(),short=cantAfford();
   const rows=Object.keys(M.ings).map(g=>{const I=M.ings[g],open=n.tok.includes(g),have=G.stock[g]||0,sp=G.spoiled[g]||0,q=G.buy[g]||0;
@@ -2195,7 +2229,8 @@ function stockHTML(){
     ${short?`<span class="small fine">Không đủ vốn: hàng và lương cần ${vnd(tot+wageTotal())}, trong túi còn ${vnd(G.money)}. Bớt hàng hoặc bớt người.</span>`:""}</div>`;
 }
 function staffHTML(){
-  return `<div class="card"><h3>Thuê người làm tối nay</h3>${Object.entries(STAFF).map(([id,S])=>`<label class="staff"><input type="checkbox" data-act="hire" data-k="${id}" ${G.staffHire[id]?"checked":""}>${avatar(id)}<div><b>${S.name} · ${S.role}</b> <span class="small">${k(S.wage)}/đêm</span><small>${S.desc}</small><small class="q">${S.quirk}</small></div></label>`).join("")}
+  return `<div class="card"><h3>Thuê người làm tối nay</h3>${Object.entries(STAFF).map(([id,S])=>staffOpen(id)?`<label class="staff"><input type="checkbox" data-act="hire" data-k="${id}" ${G.staffHire[id]?"checked":""}>${avatar(id)}<div><b>${S.name} · ${S.role}</b> <span class="small">${k(S.wage)}/đêm</span><small>${S.desc}</small><small class="q">${S.quirk}</small></div></label>`
+    :`<div class="staff" style="opacity:.45;cursor:default"><span style="width:22px"></span>${avatar(id)}<div><b>${S.name} · ${S.role}</b><small>Ghé quán từ đêm ${S.from}.</small></div></div>`).join("")}
     <span class="small">Lương trả cuối đêm. Người đã thuê sẽ được giữ cho đêm sau, bỏ chọn nếu muốn tự làm.</span></div>`;
 }
 function ledgerHTML(h){
@@ -2245,19 +2280,48 @@ function ledgerHTML(h){
   if(!tips.length) tips.push("Đêm nay làm tốt! Giữ nhịp này, khách sẽ kéo tới đông hơn.");
   return s+`<div class="advice"><b>Thằng Tí rút kinh nghiệm:</b> ${tips[0]}</div>`;
 }
+function rivalList(){
+  const M=MODEL(), names=RIVALS[M.id]||[], d=G.shop.district, n=G.night||1;
+  const list=names.map(nm=>{const h=hseed(nm+"|"+d),base=3.9+(h%80)/100,drift=Math.sin(n*.9+h%7)*.06,hit=(G.rivalHit&&G.rivalHit[nm])||0;return {name:nm,r:cl(base+drift+hit,3,4.95),n:60+h%240};});
+  list.push({name:G.shop.name,r:rating(),n:G.rN,me:true});
+  return list.sort((a,b)=>b.r-a.r);
+}
+function mapFake(){
+  if(G.ch||nil()<3||G.night===G.lastFake||Math.random()>.35) return;
+  const rv=pick(RIVALS[MODEL().id]||["Quán bên kia"]); G.lastFake=G.night;
+  pushReview({name:pick(["Khách Vãng Lai","Người Qua Đường","Review Dạo","Ẩn Danh"])+" "+rnd(100,999),stars:1,why:"phadam",rival:rv,
+    text:pick(["Quán dơ, ruồi bu đầy, đồ ăn ôi thiu. Né gấp!","Ăn xong đau bụng cả đêm. Quán bên kia đường ngon hơn nhiều.","Chủ quán thái độ, tính tiền sai. 1 sao còn nhiều.","Giá cắt cổ, đồ ăn nguội ngắt. Không bao giờ quay lại."])},2,1);
+}
+function mapResolve(){
+  G.mapNews="";
+  (G.reports||[]).forEach(i=>{const rv=G.allReviews[i];if(!rv||rv.removed)return;if(Math.random()<.7){rv.removed=true;G.rSum-=rv.stars*(rv.w||1);G.rN-=(rv.w||1);rv.react="Quán Map đã gỡ đánh giá này vì vi phạm quy định.";G.mapNews="<b>Quán Map:</b> đã gỡ các đánh giá giả bạn báo cáo, điểm quán được trả lại.";}
+    else{rv.react="Quán Map xem xét và giữ lại đánh giá này.";G.mapNews="<b>Quán Map:</b> chưa đủ bằng chứng để gỡ đánh giá bạn báo cáo.";}});
+  G.reports=[];
+}
+function mapHead(){
+  const r=rating(), all=(G.allReviews||[]).filter(x=>(x.leg||0)===(G.leg||0)&&!x.removed), cnt=[0,0,0,0,0,0];
+  all.forEach(x=>cnt[x.stars]+=x.w||1); const mx=Math.max(1,...cnt.slice(1)), P=myProf(), place=G.shop.custom&&placeOf(P.area,P.city)?placeOf(P.area,P.city):DIST[G.shop.district].name;
+  const riv=rivalList(), me=riv.findIndex(x=>x.me);
+  return `<div class="mh"><span class="big">${fmtR(r)}</span><div><span class="st">${starStr(r)}</span> <small>${G.rN} đánh giá</small></div><small>${esc(G.shop.name)} · ${MODEL().kind} · ${esc(place)}</small></div>
+    <div class="hist">${[5,4,3,2,1].map(st=>`<div><span>${st}★</span><i><b style="width:${Math.round(cnt[st]/mx*100)}%"></b></i><span>${cnt[st]}</span></div>`).join("")}</div>
+    <div class="mrank"><b>Hạng #${me+1} ở ${DIST[G.shop.district].name}</b> trong ${riv.length} quán cùng loại trên Quán Map
+      ${riv.slice(0,Math.max(3,me+1)).slice(0,6).map((x,i)=>`<div class="${x.me?"me":""}"><span>${i+1}</span><span>${esc(x.name)}${x.me?" (bạn)":""}</span><span>${fmtR(x.r)}★</span></div>`).join("")}</div>`;
+}
 function reviewsHTML(){
-  const list=G.ns.reviews.slice().sort((a,b)=>(b.reg?1:0)-(a.reg?1:0)||a.stars-b.stars).slice(0,5);
-  const r=rating();
-  let s=`<div class="map"><div class="mh"><span class="big">${fmtR(r)}</span><div><span class="st">${starStr(r)}</span> <small>${G.rN} đánh giá</small></div><small>${G.shop.name} · ${MODEL().kind} · ${DIST[G.shop.district].name}</small></div>`;
-  if(!list.length) s+=`<div class="rv"><p>Đêm nay chưa có ai viết đánh giá.</p></div>`;
-  list.forEach((rv,i)=>{
-    const idx=G.ns.reviews.indexOf(rv);
-    s+=`<div class="rv"><div class="rvh"><div class="av" style="background:${rv.color}">${rv.name[0]}</div><div><b>${rv.name}</b>${rv.reg?`<span class="badge">${REGS[rv.reg].tag}</span>`:""}<small>Vừa xong · Đêm ${rv.night-(G.legStart||0)}</small></div></div>
-      <span class="st" style="color:#f4b400">${starStr(rv.stars)}</span><p>${rv.text}</p>`;
-    if(rv.reply) s+=`<div class="reply"><b>Phản hồi từ chủ quán</b>${rv.reply}${rv.react?`<br><small style="color:#5f6368">${rv.react}</small>`:""}</div>`;
-    else {
+  const tab=G.revTab||"new";
+  const pool=tab==="new"?G.ns.reviews.slice().sort((a,b)=>(b.why==="phadam")-(a.why==="phadam")||(b.reg?1:0)-(a.reg?1:0)||a.stars-b.stars).slice(0,6)
+    :(G.allReviews||[]).filter(x=>(x.leg||0)===(G.leg||0)).slice().reverse().slice(0,25);
+  let s=`<div class="map">${mapHead()}<div class="mtabs"><button class="${tab==="new"?"on":""}" data-act="revtab" data-k="new">Đêm nay (${G.ns.reviews.length})</button><button class="${tab==="all"?"on":""}" data-act="revtab" data-k="all">Tất cả</button></div>`;
+  if(!pool.length) s+=`<div class="rv"><p>${tab==="new"?"Đêm nay chưa có ai viết đánh giá.":"Chưa có đánh giá nào."}</p></div>`;
+  pool.forEach(rv=>{
+    const idx=G.ns.reviews.indexOf(rv), canReply=tab==="new"&&idx>=0;
+    s+=`<div class="rv${rv.removed?" gone":""}"><div class="rvh"><div class="av" style="background:${rv.color}">${esc(rv.name[0])}</div><div><b>${esc(rv.name)}</b>${rv.reg?`<span class="badge">${REGS[rv.reg].tag}</span>`:""}${rv.why==="phadam"?`<span class="badge warn">Nghi đánh giá ảo</span>`:""}<small>${tab==="new"?"Vừa xong":"Đêm "+Math.max(1,(rv.night||1)-(G.legStart||0))}</small></div></div>
+      <span class="st" style="color:#f4b400">${starStr(rv.stars)}</span><p>${esc(rv.text)}</p>`;
+    if(rv.reply) s+=`<div class="reply"><b>Phản hồi từ chủ quán</b>${esc(rv.reply)}${rv.react?`<br><small style="color:#5f6368">${esc(rv.react)}</small>`:""}</div>`;
+    else if(rv.react) s+=`<div class="reply"><small style="color:#5f6368">${esc(rv.react)}</small></div>`;
+    else if(canReply){
       const opts=replyOptions(rv);
-      s+=`<div class="rbtns">${opts.map((o,j)=>`<button class="rbtn" data-act="reply" data-r="${idx}" data-o="${j}">${o.label}<small>“${o.text}”</small><small style="color:${o.eff<0?"#c5221f":"#188038"}">${o.note}</small></button>`).join("")}</div>`;
+      s+=`<div class="rbtns">${opts.map((o,j)=>`<button class="rbtn" data-act="reply" data-r="${idx}" data-o="${j}">${o.label}<small>“${esc(o.text)}”</small><small style="color:${o.eff<0?"#c5221f":"#188038"}">${o.note}</small></button>`).join("")}</div>`;
     }
     s+=`</div>`;
   });
@@ -2278,6 +2342,10 @@ function replyOptions(rv){
     return [Object.assign(A(sorry,false),{label:"Xin lỗi, mời khách quen quay lại",winBack:true,cost:24000,note:"Có thể kéo khách quen quay lại · tốn 24k"}),T(`Cảm ơn ${x} đã góp ý thẳng, quán sẽ phục vụ nhanh hơn.`),C("Khách quen mà còn chê quán!")];
   }
   switch(rv.why){
+    case "phadam": return [{label:"Báo cáo đánh giá giả",text:"Đã gửi báo cáo cho Quán Map kèm hoá đơn và camera hôm đó.",eff:0,report:true,note:"Quán Map xem xét trong một đêm, nhiều khả năng sẽ gỡ"},
+      T("Quán xin lỗi nếu có gì chưa tốt. Mời anh/chị ghé lại, quán xin mời một phần để anh/chị thử lại ạ."),
+      {label:`Lập tài khoản ảo phá lại ${rv.rival||"quán đối thủ"}`,text:`(Bạn lén đăng mấy đánh giá 1 sao cho ${rv.rival||"quán đối thủ"})`,eff:0,revenge:true,note:"Có thể bị phát hiện, mất uy tín"}];
+    case "soldout": return [A(`Xin lỗi ${x}, tối đó quán hết món sớm. Từ giờ quán nhập hàng nhiều hơn, ${x} ghé lại nhé.`,false),T(`Cảm ơn ${x} đã thông cảm.`),C("Đến trễ thì hết món là đúng rồi!")];
     case "dish": return [G1(`Cảm ơn ${x} đã khen ${(ITEMS[rv.dish]||{name:"món"}).name.toLowerCase()}! ${DISHLINE[rv.dish]||""}`)];
     case "good": return [G1(`Cảm ơn ${x}! ${MODEL().thanks}, hẹn ${x} ghé lại quán nha.`)];
     case "ok": return [G1(`Cảm ơn ${x} đã ghé. Quán sẽ cố gắng để lần sau được 5 sao ạ.`)];
@@ -2305,8 +2373,13 @@ function replyOptions(rv){
   return [G1(`Cảm ơn ${x} đã ghé quán!`)];
 }
 function reply(idx,o){
-  const rv=G.ns.reviews[idx]; if(!rv||rv.reply) return;
+  const rv=G.ns.reviews[idx]; if(!rv||rv.reply||rv.react) return;
   const opt=replyOptions(rv)[+o]; if(!opt) return;
+  if(opt.report){if(!G.reports)G.reports=[];G.reports.push(G.allReviews.indexOf(rv));rv.react="Đã báo cáo. Quán Map sẽ xem xét trong đêm nay.";return;}
+  if(opt.revenge){if(!G.traits)G.traits={k:0,r:0,c:0,t:0};G.traits.r++;
+    if(Math.random()<.5){G.replyBonus=cl(G.replyBonus-.12,-.3,.3);rv.react=`Cư dân mạng phát hiện chủ quán dùng tài khoản ảo phá ${rv.rival||"quán khác"}. Bài bóc phốt được chia sẻ khắp nhóm ăn uống.`;moment("Bị bóc phốt vì lập tài khoản ảo phá quán đối thủ",7);}
+    else{if(!G.rivalHit)G.rivalHit={};G.rivalHit[rv.rival]=(G.rivalHit[rv.rival]||0)-.3;rv.react=`${rv.rival||"Quán đối thủ"} tụt mấy bậc trên Quán Map. Chưa ai phát hiện ra bạn.`;moment(`Lập tài khoản ảo đánh 1 sao ${rv.rival||"quán đối thủ"}`,6);}
+    return;}
   rv.reply=opt.text; G.replyBonus+=opt.eff; if(opt.eff>0){if(!G.traits)G.traits={k:0,r:0,c:0,t:0};G.traits.t++;} if(opt.react) rv.react=opt.react; else if(opt.eff>=.05) rv.react="8 người thấy phản hồi này hữu ích";
   if(opt.cost) G.pendingExtra.push({l:opt.winBack?`Mời ${REGX[rv.reg]} chai bia theo lời hứa`:`Tặng ${MODEL().gift} theo lời hứa khi trả lời đánh giá`,v:opt.cost});
   if(opt.winBack&&rv.reg&&Math.random()<.75){G.regs[rv.reg].gone=false;rv.react=`${rv.reg==="sv"?"Các bạn":REGX[rv.reg].replace(/^./,c=>c.toUpperCase())} đã trả lời: “Ok, mai ghé!”`;}
@@ -2329,18 +2402,30 @@ async function rpc(fn,args){
 }
 const ERRV={QND_AUTH:"Mã người chơi trên máy này không còn hợp lệ.",QND_BANNED:"Tài khoản này đã bị khoá vì gian lận.",QND_MAX_RUNS:"Hôm nay bạn đã dùng hết 30 lượt tính điểm. Lượt này chỉ để luyện tay.",
   QND_TOO_FAST:"Lượt này kết thúc nhanh bất thường nên không được tính.",QND_EXPIRED:"Lượt này kéo dài quá 1 giờ nên không được tính.",QND_SCORE:"Điểm vượt mức cho phép nên không được tính.",
-  QND_RUN_USED:"Lượt này đã được nộp rồi.",QND_RUN:"Máy chủ không tìm thấy lượt chơi này.",QND_NICK_LEN:"Biệt danh cần từ 2 đến 20 ký tự.",QND_NICK_CHARS:"Biệt danh chỉ dùng chữ, số, khoảng trắng và dấu . _ -",QND_NICK_BAD:"Biệt danh này không dùng được, chọn tên khác nhé."};
+  QND_RUN_USED:"Lượt này đã được nộp rồi.",QND_RUN:"Máy chủ không tìm thấy lượt chơi này.",QND_NICK_LEN:"Biệt danh cần từ 2 đến 20 ký tự.",QND_NICK_CHARS:"Biệt danh chỉ dùng chữ, số, khoảng trắng và dấu . _ -",QND_NICK_BAD:"Biệt danh này không dùng được, chọn tên khác nhé.",
+  QND_SHOP_LEN:"Tên quán cần từ 2 đến 30 ký tự.",QND_SHOP_CHARS:"Tên quán có ký tự không hợp lệ.",QND_SHOP_BAD:"Tên quán này không dùng được.",QND_AREA_LEN:"Quận, phường tối đa 24 ký tự.",QND_AREA_CHARS:"Quận, phường có ký tự không hợp lệ.",QND_AREA_BAD:"Quận, phường này không dùng được."};
 function errText(e){const m=String((e&&e.message)||e);for(const c in ERRV)if(m.includes(c))return ERRV[c];
   return /abort|fetch|network|load failed|Failed/i.test(m)?"Không kết nối được máy chủ xếp hạng. Kiểm tra mạng rồi thử lại.":"Máy chủ xếp hạng báo lỗi: "+m.slice(0,90);}
 function nickErr(n){n=String(n||"").trim().replace(/\s+/g," ");if(n.length<2||n.length>20)return ERRV.QND_NICK_LEN;
   if(!/^[A-Za-z0-9À-ỹ _.\-]+$/.test(n))return ERRV.QND_NICK_CHARS;const l=n.toLowerCase();
   if(/(lồn|buồi|cặc|địt|đụ|đéo|đĩ|chịch|nứng|lìn)/.test(l)||/(^|[^a-z0-9À-ỹ])(dm|đm|dcm|đcm|dkm|vcl|vkl|vl|clgt|cc|dmm|đmm|loz|lol|du ma|dit|deo|admin|qtv)([^a-z0-9À-ỹ]|$)/.test(l))return ERRV.QND_NICK_BAD;return "";}
 async function ensurePlayer(){let p=lsGet(PKEY);if(p&&p.id&&p.secret)return p;
-  const j=await rpc("qnd_register",{p_nick:(p&&p.nick)||("Chủ quán "+(1000+Math.floor(Math.random()*9000)))});p={id:j.id,secret:j.secret,nick:j.nick};lsSet(PKEY,p);return p;}
+  const j=await rpc("qnd_register",{p_nick:(p&&p.nick)||("Chủ quán "+(1000+Math.floor(Math.random()*9000)))});p=Object.assign(lsGet(PKEY)||{},{id:j.id,secret:j.secret,nick:j.nick});lsSet(PKEY,p);return p;}
 async function authed(fn,args){let p=await ensurePlayer();
   try{return await rpc(fn,Object.assign({p_id:p.id,p_secret:p.secret},args));}
-  catch(e){if(!String(e.message).includes("QND_AUTH"))throw e;const nick=p.nick;lsSet(PKEY,{nick});p=await ensurePlayer();return rpc(fn,Object.assign({p_id:p.id,p_secret:p.secret},args));}}
+  catch(e){if(!String(e.message).includes("QND_AUTH"))throw e;const keep=Object.assign({},p);delete keep.id;delete keep.secret;lsSet(PKEY,keep);p=await ensurePlayer();return rpc(fn,Object.assign({p_id:p.id,p_secret:p.secret},args));}}
 const myNick=()=>{const p=lsGet(PKEY);return (p&&p.nick)||"";};
+const myProf=()=>lsGet(PKEY)||{};
+const placeOf=(area,city)=>[area,CITIES[city]].filter(Boolean).join(", ");
+function textErr(t,min,max,what){t=String(t||"").trim().replace(/\s+/g," ");if(!t&&min===0)return "";if(t.length<Math.max(min,2)||t.length>max)return `${what} cần từ 2 đến ${max} ký tự.`;
+  if(!/^[A-Za-z0-9À-ỹ _.,&'\/\-]+$/.test(t))return `${what} chỉ dùng chữ, số, khoảng trắng và dấu . , & ' / -`;if(nickErr(t.slice(0,20).padEnd(2,"x"))===ERRV.QND_NICK_BAD)return `${what} này không dùng được, chọn tên khác nhé.`;return "";}
+let PROF_V1=false, BOARD_V1=false;
+async function syncProfile(p){
+  if(!rankOn()) return p;
+  if(!PROF_V1){try{const j=await authed("qnd_profile",{p_nick:p.nick,p_shop:p.shop||"",p_city:p.city||"",p_area:p.area||""});return Object.assign(p,{nick:j.nick,shop:j.shop||"",city:j.city||"",area:j.area||""});}
+    catch(e){if(!/qnd_profile|Could not find|PGRST202|404/i.test(String(e.message)))throw e;PROF_V1=true;}}
+  const j=await authed("qnd_rename",{p_nick:p.nick}); p.nick=j.nick; return p;}
+function signText(){const M=MODEL();return G&&G.shop&&G.shop.custom&&G.shop.model==="nhau"?G.shop.name.toUpperCase():M.sign;}
 function localBest(day){const b=lsGet(BKEY);return b&&b.day===day?b:null;}
 
 /* ===== challenge flow ===== */
@@ -2398,7 +2483,7 @@ function chShareText(){
 
 /* ===== leaderboard screen ===== */
 const BOARD={};
-function boardKey(b){return b.kind+"|"+(b.kind==="yday"?prevDay(vnDay()):vnDay())+"|"+(b.kind==="model"?b.model:"");}
+function boardKey(b){return b.kind+"|"+(b.kind==="yday"?prevDay(vnDay()):vnDay())+"|"+(b.kind==="model"?b.model:"")+"|"+(b.city||"");}
 function prevDay(d){const p=d.split("-").map(Number);return new Date(Date.UTC(p[0],p[1]-1,p[2])-864e5).toISOString().slice(0,10);}
 function openBoard(from){G.board={kind:"day",model:chDef(vnDay()).model,from};G.screen="board";loadBoard(false);}
 async function loadBoard(force){
@@ -2406,7 +2491,9 @@ async function loadBoard(force){
   if(!force&&BOARD[key]&&BOARD[key].at&&Date.now()-BOARD[key].at<30000){updBoard();return;}
   BOARD[key]={loading:true}; updBoard();
   try{const p=lsGet(PKEY), day=b.kind==="yday"?prevDay(vnDay()):vnDay();
-    const j=await rpc("qnd_board",{p_kind:b.kind==="yday"?"day":b.kind,p_day:day,p_model:b.kind==="model"?b.model:null,p_player:p&&p.id?p.id:null,p_limit:50});
+    const args={p_kind:b.kind==="yday"?"day":b.kind,p_day:day,p_model:b.kind==="model"?b.model:null,p_player:p&&p.id?p.id:null,p_limit:50};
+    if(b.city&&!BOARD_V1)args.p_city=b.city;
+    let j; try{j=await rpc("qnd_board",args);}catch(e){if(!args.p_city||!/qnd_board|Could not find|PGRST202|404/i.test(String(e.message)))throw e;BOARD_V1=true;delete args.p_city;j=await rpc("qnd_board",args);j.cityOff=true;}
     BOARD[key]={data:j,at:Date.now()};}
   catch(e){BOARD[key]={err:errText(e)};}
   updBoard();
@@ -2416,8 +2503,8 @@ function boardDesc(b){const t=chDef(vnDay()),y=chDef(prevDay(vnDay()));
   if(b.kind==="yday")return `Đề hôm qua: ${MICO[y.model]} ${MODELS[y.model].name} · ${DIST[y.district].name}.`;
   if(b.kind==="week")return "Cộng điểm cao nhất của mỗi ngày từ thứ Hai. Ngày lỗ tính là 0, chơi đều mỗi ngày sẽ lên hạng.";
   return `Lãi một đêm cao nhất trong 28 ngày qua, chỉ tính các ngày có đề ${MODELS[b.model].name}.`;}
-function boardRow(x,me){const rc=x.rank<=3?" t"+x.rank:"";
-  return `<div class="brow${me?" me":""}"><span class="rk${rc}">${x.rank<=3?["","🥇","🥈","🥉"][x.rank]:x.rank}</span><span class="nk">${esc(x.nick)}${me?" (bạn)":""}<small>${x.rating!=null?fmtR(+x.rating)+"★ · ":""}combo x${x.combo||0}${G.board&&G.board.kind==="week"?` · ${x.n} ngày`:` · ${x.n} lượt`}</small></span><span class="sc ${x.score>=0?"goodc":"fine"}">${ks(x.score)}</span></div>`;}
+function boardRow(x,me){const rc=x.rank<=3?" t"+x.rank:"", pl=placeOf(x.area,x.city);
+  return `<div class="brow${me?" me":""}"><span class="rk${rc}">${x.rank<=3?["","🥇","🥈","🥉"][x.rank]:x.rank}</span><span class="nk">${esc(x.shop||x.nick)}${me?" (bạn)":""}<small>${x.shop?`${esc(x.nick)} · `:""}${pl?esc(pl)+" · ":""}${x.rating!=null?fmtR(+x.rating)+"★ · ":""}${G.board&&G.board.kind==="week"?`${x.n} ngày`:`combo x${x.combo||0}`}</small></span><span class="sc ${x.score>=0?"goodc":"fine"}">${ks(x.score)}</span></div>`;}
 function boardListHTML(){
   const b=G.board; if(!rankOn()) return `<span class="small">Bảng xếp hạng online chưa được bật trên bản game này.</span>`;
   const e=BOARD[boardKey(b)]; if(!e||e.loading) return `<span class="small">Đang tải bảng xếp hạng…</span>`;
@@ -2457,6 +2544,7 @@ function renderPanel(){
       ${(()=>{const t=chDef(vnDay()),lb=localBest(t.day);return `<div class="card chcard"><span class="lab">Đêm thử thách hôm nay · ${dmOf(t.day)}</span><span class="chm">${MICO[t.model]} ${MODELS[t.model].name} · ${DIST[t.district].name}</span>
         <small>Ai cũng chơi cùng một đêm: cùng lượt khách, cùng tình huống. Điểm là tiền lãi đêm đó, xếp hạng với mọi người. Mỗi ngày một đề mới.</small>${lb?`<small>Điểm cao nhất của bạn hôm nay: <b style="color:var(--ink)">${ks(lb.score)}</b> · ${lb.n} lượt</small>`:""}
         <div class="btnrow"><button class="btn gold" data-act="chstart">Chơi thử thách</button><button class="btn" data-act="board">Bảng xếp hạng</button></div></div>`;})()}
+      ${(()=>{const P=myProf();return P.nick||P.shop?`<div class="card pcard"><b>${esc(P.shop||P.nick)}</b><small>${P.shop?`Chủ quán ${esc(P.nick||"…")}`:"Chưa đặt tên quán"}${placeOf(P.area,P.city)?` · ${esc(placeOf(P.area,P.city))}`:""}</small><button class="btn" data-act="profedit">Sửa hồ sơ</button></div>`:`<button class="btn" data-act="profedit">Đặt tên quán và khu vực</button>`;})()}
       ${(()=>{const sv=loadSave();return sv?`<button class="btn primary" data-act="resume">Chơi tiếp · Đêm ${Math.max(1,sv.night-(sv.legStart||0))} · ${sv.shop.name}</button><button class="btn" data-act="start">Mở quán mới</button>`:`<button class="btn primary" data-act="start">Mở quán</button>`;})()}
       ${volHTML()}`;
   } else if(G.screen==="nightstart"){
@@ -2464,7 +2552,7 @@ function renderPanel(){
     const regs=G.regq.map(q=>REGS[q.id].name), goneRegs=Object.keys(REGS).filter(r=>G.regs[r].gone).map(r=>REGS[r].name);
     h=(G.ch?`<div class="title">THỬ THÁCH ${dmOf(G.ch.day)}</div><p class="sub" style="text-align:center;margin-top:-4px">${MICO[G.ch.model]} ${G.shop.name} · ${DIST[G.shop.district].name}</p>
       <div class="advice">Một đêm duy nhất, ai cũng nhận cùng lượt khách và cùng tình huống. <b>Điểm = tiền lãi cuối đêm.</b> ${myNick()?`Tên trên bảng: <b>${esc(myNick())}</b>. `:""}Quán đã có sẵn: ${Object.keys(CH_KIT).map(x=>x==="lo"?MODEL().loName:UPS[x].name).join(", ").toLowerCase()}.</div><div class="card"><h3>Tối nay</h3><div class="rows">`
-    :`<div class="title">ĐÊM ${nil()}</div><p class="sub" style="text-align:center;margin-top:-4px">${G.shop.name} · ${DIST[G.shop.district].name}${G.leg?` · chặng ${G.leg+1}`:""}</p><div class="card"><h3>Tối nay</h3><div class="rows">`)+`
+    :`<div class="title">ĐÊM ${nil()}</div><p class="sub" style="text-align:center;margin-top:-4px">${esc(G.shop.name)} · ${DIST[G.shop.district].name}${G.leg?` · chặng ${G.leg+1}`:""}</p>${storyHTML()}${G.mapNews?`<div class="advice">${G.mapNews}</div>`:""}<div class="card"><h3>Tối nay</h3><div class="rows">`)+`
       ${G.setupPaid&&nil()===1?`<div><span>${G.setupPaid.l}</span><span class="fine">−${vnd(G.setupPaid.v)}</span></div>`:""}
       ${G.branches.length?`<div><span>Cửa hàng khác (người nhà trông)</span><span>${G.branches.map(b=>b.name).join(", ")}</span></div>`:""}
       <div><span>Số bàn</span><span>${G.tables.length}</span></div>
@@ -2486,9 +2574,9 @@ function renderPanel(){
   } else if(G.screen==="ledger"||G.screen==="broke"){
     const hs=G.hist[G.hist.length-1];
     h=ledgerSummary(hs);
-    h+=G.screen==="broke"?`<button class="btn primary" data-act="tobroke">Hết vốn rồi…</button>`:`<button class="btn primary" data-act="toreviews">Xem đánh giá trên bản đồ (${G.ns.reviews.length})</button>`;
+    h+=G.screen==="broke"?`<button class="btn primary" data-act="tobroke">Hết vốn rồi…</button>`:`<button class="btn primary" data-act="toreviews">Mở Quán Map (${G.ns.reviews.length} đánh giá mới)</button>`;
   } else if(G.screen==="reviews"){
-    h=`<div class="title" style="font-size:1.5em">ĐÁNH GIÁ ĐÊM ${nil()}</div><p class="sub">Trả lời đánh giá ảnh hưởng tới lượng khách đêm sau.</p>`+reviewsHTML()+
+    h=`<div class="title" style="font-size:1.5em">QUÁN MAP</div><p class="sub">Điểm đánh giá quyết định quán đông hay vắng. Trả lời đánh giá cũng giúp kéo khách.</p>`+reviewsHTML()+
       `<button class="btn primary" data-act="toshop">${nil()<NN?"Xong, chuẩn bị đêm sau":"Tổng kết chặng 7 đêm"}</button>`;
   } else if(G.screen==="shop"){
     h=`<div class="title" style="font-size:1.5em">SẮM SỬA CHO QUÁN</div><div class="card"><div class="rows"><div><span>Vốn trong túi</span><span>${vnd(G.money)}</span></div></div></div>
@@ -2524,20 +2612,25 @@ function renderPanel(){
     h=`<span class="lab" style="text-align:center">Thử thách ${dmOf(ch.day)} · ${MICO[ch.model]} ${MODELS[ch.model].name} · ${DIST[ch.district].name}</span>
      <div class="title">${ch.score>=0?"LÃI":"LỖ"} ${k(Math.abs(ch.score))}</div>
      <div class="card" id="chnet" aria-live="polite">${chNetHTML()}</div>
-     ${rankOn()?`<div class="card"><h3>Tên trên bảng xếp hạng</h3><div class="nickrow"><input id="nick" maxlength="20" autocomplete="nickname" value="${esc(myNick())}" placeholder="Biệt danh của bạn" aria-label="Biệt danh"><button class="btn" data-act="chnick">Lưu tên</button></div><span class="small" id="nickst" aria-live="polite">Từ 2 đến 20 ký tự. Tên tục tĩu sẽ bị từ chối.</span></div>`:""}
+     ${rankOn()?(()=>{const P=myProf();return `<div class="card pcard"><b>${esc(P.shop||P.nick||"Chưa đặt tên")}</b><small>${P.shop?`Chủ quán ${esc(P.nick)} · `:""}${esc(placeOf(P.area,P.city)||"Chưa chọn khu vực")}</small><button class="btn" data-act="profedit">Sửa hồ sơ</button></div>`;})():""}
      <div class="btnrow"><button class="btn gold" data-act="chstart">Chơi lại đề này</button><button class="btn" data-act="board">Bảng xếp hạng</button></div>
      ${ledgerSummary(hs)}${shareCardHTML("ch")}
      <button class="btn" data-act="chhome">Về màn hình chính</button>`;
   } else if(G.screen==="nick"){
-    h=`<div class="title" style="font-size:1.6em">TÊN CHỦ QUÁN</div>
-     <p class="sub">Tên này hiện trên bảng xếp hạng cho mọi người cùng xem. Đổi lại được sau mỗi lượt chơi.</p>
-     <div class="card"><h3>Biệt danh của bạn</h3><div class="nickrow" style="grid-template-columns:1fr"><input id="nickfirst" maxlength="20" autocomplete="nickname" enterkeyhint="go" value="${esc(myNick())}" placeholder="Ví dụ: Minh Trùm Hẻm" aria-label="Biệt danh"></div>
-      <span class="small" id="nickfst" aria-live="polite">Từ 2 đến 20 ký tự: chữ, số, khoảng trắng. Tên tục tĩu sẽ bị từ chối.</span></div>
-     <button class="btn gold" data-act="nickgo">Vào thử thách</button><button class="btn" data-act="nickback">Quay lại</button>`;
+    const P=myProf(), nx=G.profNext;
+    h=`<div class="title" style="font-size:1.6em">HỒ SƠ QUÁN</div>
+     <p class="sub">Tên quán và khu vực hiện trên bảng xếp hạng, trên biển hiệu quán nhậu của bạn và trên Quán Map.</p>
+     <div class="card prof"><label><span>Tên chủ quán (biệt danh)</span><input id="nickfirst" maxlength="20" autocomplete="nickname" value="${esc(P.nick||"")}" placeholder="Ví dụ: Minh Trùm Hẻm"></label>
+      <label><span>Tên quán <small>(không bắt buộc)</small></span><input id="pshop" maxlength="30" value="${esc(P.shop||"")}" placeholder="Ví dụ: Quán Ốc Cô Ba"></label>
+      <div class="prow"><label><span>Thành phố</span><select id="pcity"><option value="">Chọn…</option>${Object.entries(CITIES).map(([c,n])=>`<option value="${c}" ${P.city===c?"selected":""}>${n}</option>`).join("")}</select></label>
+      <label><span>Quận, phường</span><input id="parea" maxlength="24" value="${esc(P.area||"")}" placeholder="Q. Bình Thạnh"></label></div>
+      <span class="small" id="nickfst" aria-live="polite">Tên tục tĩu sẽ bị từ chối. Đổi lại được bất cứ lúc nào.</span></div>
+     <button class="btn gold" data-act="nickgo">${nx==="ch"?"Lưu và vào thử thách":nx==="start"?"Lưu và mở quán":"Lưu hồ sơ"}</button><button class="btn" data-act="nickback">${nx==="start"?"Bỏ qua, mở quán luôn":"Quay lại"}</button>`;
   } else if(G.screen==="board"){
     const b=G.board, T=[["day","Hôm nay"],["yday","Hôm qua"],["week","Tuần này"],["model","Mô hình"]];
     h=`<div class="title" style="font-size:1.5em">BẢNG XẾP HẠNG</div>
      <div class="tabs" role="tablist">${T.map(([id,l])=>`<button class="tab ${b.kind===id?"on":""}" role="tab" aria-selected="${b.kind===id}" data-act="bdtab" data-k="${id}">${l}</button>`).join("")}</div>
+     ${myProf().city&&!BOARD_V1?`<div class="chips two"><button class="tab ${!b.city?"on":""}" data-act="bdcity" data-k="">Cả nước</button><button class="tab ${b.city?"on":""}" data-act="bdcity" data-k="${myProf().city}">${CITIES[myProf().city]}</button></div>`:""}
      ${b.kind==="model"?`<div class="chips">${MK.map(m=>`<button class="tab ${b.model===m?"on":""}" data-act="bdmodel" data-k="${m}">${MICO[m]} ${MSHORT[m]}</button>`).join("")}</div>`:""}
      <p class="sub">${boardDesc(b)}</p>
      <div class="card" id="bdlist">${boardListHTML()}</div>
@@ -2614,7 +2707,11 @@ kc.addEventListener("pointerdown",ev=>{
 document.addEventListener("click",ev=>{
   const b=ev.target.closest("[data-act]"); if(!b||b.disabled) return; audio();
   const a=b.dataset.act;
-  if(a==="start"){const m=G.mute;G=fresh();G.mute=m;buildStatic();startNight();}
+  if(a==="start"){const P=myProf();if(!P.asked&&!P.shop){P.asked=1;lsSet(PKEY,P);G.profNext="start";G.nickFrom=G.screen;G.screen="nick";renderUI();return;}
+    const m=G.mute;G=fresh();G.mute=m;if(P.shop){G.shop.name=P.shop;G.shop.custom=true;}buildStatic();startNight();}
+  else if(a==="profedit"){G.profNext=null;G.nickFrom=G.screen;G.screen="nick";}
+  else if(a==="revtab"){G.revTab=b.dataset.k;renderPanel();return;}
+  else if(a==="bdcity"){G.board.city=b.dataset.k||null;renderPanel();loadBoard(false);return;}
   else if(a==="outer"){G.useOuter=b.checked;setupTables();renderPanel();}
   else if(a==="bq"){const g=b.dataset.g;G.buy[g]=Math.max(0,(G.buy[g]||0)+(+b.dataset.d));renderPanel();return;}
   else if(a==="bsug"){G.buy=suggestBuy();renderPanel();return;}
@@ -2643,13 +2740,17 @@ document.addEventListener("click",ev=>{
   else if(a==="resume"){resumeGame();}
   else if(a==="again"){const m=G.mute;G=fresh();G.mute=m;buildStatic();G.tables=demoTables();}
   else if(a==="savecard"){saveCard();return;}
-  else if(a==="chstart"){if(!myNick()){G.nickFrom=G.screen;G.screen="nick";renderUI();setTimeout(()=>{const i=$("nickfirst");if(i)i.focus();},50);return;}startChallenge();}
-  else if(a==="nickback"){G.screen=G.nickFrom&&G.nickFrom!=="nick"?G.nickFrom:"title";}
-  else if(a==="nickgo"){const inp=$("nickfirst"),st=$("nickfst"),v=(inp?inp.value:"").trim().replace(/\s+/g," "),er=nickErr(v);
-    if(er){st.textContent=er;st.className="small fine";if(inp)inp.focus();return;}
-    const p=lsGet(PKEY)||{}; p.nick=v; lsSet(PKEY,p);
-    if(p.id&&rankOn())authed("qnd_rename",{p_nick:v}).catch(()=>{});
-    startChallenge();}
+  else if(a==="chstart"){if(!myNick()){G.profNext="ch";G.nickFrom=G.screen;G.screen="nick";renderUI();setTimeout(()=>{const i=$("nickfirst");if(i)i.focus();},50);return;}startChallenge();}
+  else if(a==="nickback"){if(G.profNext==="start"){G.profNext=null;const m=G.mute;G=fresh();G.mute=m;buildStatic();startNight();}else G.screen=G.nickFrom&&G.nickFrom!=="nick"?G.nickFrom:"title";}
+  else if(a==="nickgo"){const cln=x=>($(x)?$(x).value:"").trim().replace(/\s+/g," "),st=$("nickfst"),v=cln("nickfirst"),shop=cln("pshop"),area=cln("parea"),city=$("pcity")?$("pcity").value:"";
+    const er=(v||G.profNext==="ch"?nickErr(v):"")||textErr(shop,0,30,"Tên quán")||textErr(area,0,24,"Quận, phường");
+    if(er){st.textContent=er;st.className="small fine";return;}
+    const p=Object.assign(lsGet(PKEY)||{},{nick:v,shop,city,area,asked:1}); lsSet(PKEY,p); Object.keys(BOARD).forEach(x=>delete BOARD[x]);
+    if(rankOn()&&v)syncProfile(Object.assign({},p)).then(q=>{const cur=lsGet(PKEY)||{};lsSet(PKEY,Object.assign(cur,{nick:q.nick,shop:q.shop,city:q.city,area:q.area}));}).catch(e=>{toast(errText(e),false);});
+    const nx=G.profNext; G.profNext=null;
+    if(nx==="ch"){startChallenge();}
+    else if(nx==="start"){const m=G.mute;G=fresh();G.mute=m;if(shop){G.shop.name=shop;G.shop.custom=true;}buildStatic();startNight();}
+    else {if(G.shop&&G.shop.custom&&shop&&G.shop.model==="nhau"&&G.leg===0)G.shop.name=shop;G.screen=G.nickFrom&&G.nickFrom!=="nick"?G.nickFrom:"title";buildStatic();}}
   else if(a==="chhome"){CHR=null;RNG=Math.random;const m=G.mute;G=fresh();G.mute=m;buildStatic();G.tables=demoTables();}
   else if(a==="board"){openBoard(G.screen);}
   else if(a==="bdtab"){G.board.kind=b.dataset.k;renderPanel();loadBoard(false);return;}

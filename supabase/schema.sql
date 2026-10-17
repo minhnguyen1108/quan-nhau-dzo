@@ -27,6 +27,11 @@ create table if not exists qnd_runs (
 );
 create index if not exists qnd_runs_player_day on qnd_runs(player_id, day);
 
+-- v2: tên quán và khu vực hiện trên bảng xếp hạng
+alter table qnd_players add column if not exists shop text;
+alter table qnd_players add column if not exists city text;
+alter table qnd_players add column if not exists area text;
+
 create table if not exists qnd_best (
   day        date not null,
   player_id  uuid not null references qnd_players(id) on delete cascade,
@@ -106,6 +111,27 @@ begin
   return n;
 end $$;
 
+-- Tên quán: 2-30 ký tự, cùng bộ lọc tục tĩu với biệt danh
+create or replace function qnd_clean_text(p text, p_min int, p_max int, p_code text) returns text
+language plpgsql immutable as $$
+declare n text := regexp_replace(btrim(coalesce(p, '')), '\s+', ' ', 'g');
+        l text;
+begin
+  if n = '' and p_min = 0 then return null; end if;
+  if char_length(n) < p_min or char_length(n) > p_max then raise exception '%_LEN', p_code; end if;
+  if n !~ '^[A-Za-z0-9À-ỹ _.,&''/\-]+$' then raise exception '%_CHARS', p_code; end if;
+  l := lower(n);
+  if l ~* '(lồn|buồi|cặc|địt|đụ|đéo|đĩ|chịch|nứng|lìn)'
+     or l ~* '(^|[^a-z0-9À-ỹ])(dm|đm|dcm|đcm|dkm|vcl|vkl|vl|clgt|cc|dmm|đmm|loz|lol|du ma|dit|deo|admin|qtv)([^a-z0-9À-ỹ]|$)'
+  then raise exception '%_BAD', p_code; end if;
+  return n;
+end $$;
+
+-- Mã thành phố (trình duyệt đổi ra tên đầy đủ)
+create or replace function qnd_city_ok(p text) returns text language sql immutable as $$
+  select case when p = any(array['sg','hn','dn','hp','ct','hue','nt','dl','bh','vt','qn','bmt','khac']) then p else null end;
+$$;
+
 -- ---------- API cho trình duyệt ----------
 drop function if exists qnd_register(text);
 create function qnd_register(p_nick text) returns jsonb
@@ -126,6 +152,20 @@ declare v qnd_players := qnd_auth(p_id, p_secret);
 begin
   update qnd_players set nick = v_nick where id = v.id;
   return jsonb_build_object('nick', v_nick);
+end $$;
+
+drop function if exists qnd_profile(uuid, text, text, text, text, text);
+create function qnd_profile(p_id uuid, p_secret text, p_nick text, p_shop text, p_city text, p_area text) returns jsonb
+language plpgsql volatile security definer set search_path = public as $$
+declare v qnd_players := qnd_auth(p_id, p_secret);
+        v_nick text := qnd_clean_nick(p_nick);
+        v_shop text := qnd_clean_text(p_shop, 0, 30, 'QND_SHOP');
+        v_area text := qnd_clean_text(p_area, 0, 24, 'QND_AREA');
+        v_city text := qnd_city_ok(p_city);
+begin
+  if v_shop is not null and char_length(v_shop) < 2 then raise exception 'QND_SHOP_LEN'; end if;
+  update qnd_players set nick = v_nick, shop = v_shop, city = v_city, area = v_area where id = v.id;
+  return jsonb_build_object('nick', v_nick, 'shop', v_shop, 'city', v_city, 'area', v_area);
 end $$;
 
 drop function if exists qnd_start(uuid, text);
@@ -198,29 +238,30 @@ end $$;
 -- p_kind: 'day' (bảng một ngày), 'week' (cộng điểm cao nhất mỗi ngày từ thứ Hai),
 --         'model' (điểm một đêm cao nhất trong 28 ngày, chỉ các ngày có đề là p_model)
 drop function if exists qnd_board(text, date, text, uuid, int);
+drop function if exists qnd_board(text, date, text, uuid, int, text);
 create function qnd_board(p_kind text, p_day date default null, p_model text default null,
-                          p_player uuid default null, p_limit int default 50) returns jsonb
+                          p_player uuid default null, p_limit int default 50, p_city text default null) returns jsonb
 language plpgsql stable security definer set search_path = public as $$
 declare d date := coalesce(p_day, qnd_today());
         lim int := least(100, greatest(1, coalesce(p_limit, 50)));
         res jsonb;
 begin
   with src as (
-    select b.player_id, p.nick, b.score, b.rating, b.combo, b.attempts, b.updated_at
+    select b.player_id, p.nick, p.shop, p.city, p.area, b.score, b.rating, b.combo, b.attempts, b.updated_at
       from qnd_best b join qnd_players p on p.id = b.player_id
-     where p_kind = 'day' and b.day = d and not p.banned
+     where p_kind = 'day' and b.day = d and not p.banned and (p_city is null or p.city = p_city)
     union all
-    select b.player_id, min(p.nick), sum(greatest(b.score, 0))::bigint, round(avg(b.rating), 1),
+    select b.player_id, min(p.nick), min(p.shop), min(p.city), min(p.area), sum(greatest(b.score, 0))::bigint, round(avg(b.rating), 1),
            max(b.combo), count(*)::int, max(b.updated_at)
       from qnd_best b join qnd_players p on p.id = b.player_id
-     where p_kind = 'week' and not p.banned
+     where p_kind = 'week' and not p.banned and (p_city is null or p.city = p_city)
        and b.day between date_trunc('week', d)::date and date_trunc('week', d)::date + 6
      group by b.player_id
     union all
     select * from (
-      select distinct on (b.player_id) b.player_id, p.nick, b.score, b.rating, b.combo, b.attempts, b.updated_at
+      select distinct on (b.player_id) b.player_id, p.nick, p.shop, p.city, p.area, b.score, b.rating, b.combo, b.attempts, b.updated_at
         from qnd_best b join qnd_players p on p.id = b.player_id
-       where p_kind = 'model' and not p.banned and qnd_model_of(b.day) = p_model
+       where p_kind = 'model' and not p.banned and qnd_model_of(b.day) = p_model and (p_city is null or p.city = p_city)
          and b.day between d - 27 and d
        order by b.player_id, b.score desc, b.updated_at
     ) m
@@ -230,25 +271,25 @@ begin
       from src
   )
   select jsonb_build_object(
-    'kind', p_kind, 'day', d, 'model', p_model,
+    'kind', p_kind, 'day', d, 'model', p_model, 'city', p_city,
     'total', (select count(*) from ranked),
-    'top', coalesce((select jsonb_agg(jsonb_build_object('rank', rk, 'nick', nick, 'score', score, 'rating', rating,
+    'top', coalesce((select jsonb_agg(jsonb_build_object('rank', rk, 'nick', nick, 'shop', shop, 'city', city, 'area', area, 'score', score, 'rating', rating,
                                                           'combo', combo, 'n', attempts, 'me', player_id = p_player) order by rn)
                        from ranked where rn <= lim), '[]'::jsonb),
-    'me', (select jsonb_build_object('rank', rk, 'nick', nick, 'score', score, 'rating', rating, 'combo', combo, 'n', attempts)
+    'me', (select jsonb_build_object('rank', rk, 'nick', nick, 'shop', shop, 'city', city, 'area', area, 'score', score, 'rating', rating, 'combo', combo, 'n', attempts)
              from ranked where player_id = p_player)
   ) into res;
   return res;
 end $$;
 
--- Chỉ cho trình duyệt gọi 5 hàm API
-revoke all on function qnd_register(text), qnd_rename(uuid, text, text), qnd_start(uuid, text),
-  qnd_submit(uuid, text, uuid, bigint, jsonb), qnd_board(text, date, text, uuid, int),
-  qnd_auth(uuid, text), qnd_clean_nick(text), qnd_hash(text), qnd_cfg(), qnd_today(), qnd_model_of(date) from public;
+-- Chỉ cho trình duyệt gọi 6 hàm API
+revoke all on function qnd_register(text), qnd_rename(uuid, text, text), qnd_profile(uuid, text, text, text, text, text), qnd_start(uuid, text),
+  qnd_submit(uuid, text, uuid, bigint, jsonb), qnd_board(text, date, text, uuid, int, text),
+  qnd_auth(uuid, text), qnd_clean_nick(text), qnd_clean_text(text, int, int, text), qnd_city_ok(text), qnd_hash(text), qnd_cfg(), qnd_today(), qnd_model_of(date) from public;
 do $$ begin
   if exists (select 1 from pg_roles where rolname = 'anon') then
-    execute 'grant execute on function qnd_register(text), qnd_rename(uuid, text, text), qnd_start(uuid, text),
-      qnd_submit(uuid, text, uuid, bigint, jsonb), qnd_board(text, date, text, uuid, int) to anon, authenticated';
+    execute 'grant execute on function qnd_register(text), qnd_rename(uuid, text, text), qnd_profile(uuid, text, text, text, text, text), qnd_start(uuid, text),
+      qnd_submit(uuid, text, uuid, bigint, jsonb), qnd_board(text, date, text, uuid, int, text) to anon, authenticated';
   end if;
 end $$;
 
